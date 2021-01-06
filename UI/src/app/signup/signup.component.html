@@ -1,0 +1,64 @@
+<div>
+    <div class="login-dark">
+      <form>
+        <h2 class="sr-only">Login Form</h2>
+      <div class="title">Covax Registration</div>
+      <div style="margin-bottom: 18px;">
+        <mat-form-field appearance="standard" style="margin-right: 40px;">
+          <mat-label>First Name</mat-label>
+          <input matInput placeholder="First Name" [formControl]="FirstName" required>
+        </mat-form-field>
+        <mat-form-field appearance="standard" style="margin-right: 40px;">
+          <mat-label>Middle Name</mat-label>
+          <input matInput placeholder="Middle Name" [formControl]="MidName" >
+        </mat-form-field>
+        <mat-form-field appearance="standard" >
+          <mat-label>Last Name</mat-label>
+          <input matInput placeholder="Last Name" [formControl]="LastName" required>
+        </mat-form-field>
+  </div>
+  <div style="margin-bottom: 18px;">
+          <mat-form-field appearance="outline" style="width: 240px;margin-right: 18%;">
+            <mat-label>Enter Your Email</mat-label>
+            <input matInput placeholder="pat@example.com" [formControl]="email" required>
+            <mat-error *ngIf="email.invalid">{{getEmailErrorMessage()}}</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" style="width: 240px;">
+            <mat-label>Enter Your Phone Number</mat-label>
+            <input matInput placeholder="+491267345986" [formControl]="phNumber" required>
+            <mat-error *ngIf="email.phNumber">{{getEmailErrorMessage()}}</mat-error>
+          </mat-form-field>
+  </div>
+  <div >
+          <mat-form-field appearance="outline" style="margin-right: 18%;">
+            <mat-label>Enter your password</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'"  [formControl]="password" required>
+            <mat-error *ngIf="email.invalid">{{getPasswordErrorMessage()}}</mat-error>
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Confirm password</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'"  [formControl]="Conf_password" required>
+            <mat-error *ngIf="email.invalid">{{getPasswordErrorMessage()}}</mat-error>
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </mat-form-field>
+    </div> 
+    <div style="float: right;">
+    <div class="row">
+    <button style="float: right;float: right;margin-right: 1.4rem;width: 10rem;" (click)="signup()"  mat-raised-button color="primary">Register</button>
+     </div> 
+    <div class="row">
+      <a  style="float: right;float: right;margin-right: 1.4rem;width: 14rem;" routerLink="/first-component" routerLinkActive="active">Forgot your password?</a>
+    </div>
+    <div class="row">
+      <a  style="float: right;float: right;margin-right: 1.4rem;width: 14rem;" routerLink="/login" routerLinkActive="active">Login</a>
+    </div>
+  </div>
+     </form>
+</div>
+</div>
+         
