@@ -14,11 +14,14 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class EmailSender {
 
 
 
-	public static int sendEmail(String emailId) {
+	public int sendEmail(String emailId) {
 		int random = (int) (Math.random() * 90000 + 10000);
 
 		Properties prop = new Properties();

@@ -19,12 +19,5 @@ public class SampleController {
 		System.out.println("got req");
 		return "{\"value\":\"WORKING\"}";
 	}
-	@RequestMapping(
-		    value = "/sendtoken", 
-		    method = RequestMethod.POST)
-	public String sendMail(@RequestBody Map<String, Object> payload) {
-		System.out.println(payload);
-		int token=EmailSender.sendEmail((String) payload.get("email"));
-		return "{\"token\":\""+token+"\"}";
-	}
+
 }
