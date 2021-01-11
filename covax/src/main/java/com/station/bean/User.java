@@ -1,10 +1,15 @@
 package com.station.bean;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.station.services.AttributeEncryptor;
 
 @Entity
 public class User {
@@ -19,6 +24,8 @@ public class User {
 	String email;
 	@Column
 	String mobile;
+	@Convert(converter = AttributeEncryptor.class)
+	String password;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,5 +66,13 @@ public class User {
 	}
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+	@JsonIgnore
+	@JsonProperty(value = "password")
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }
