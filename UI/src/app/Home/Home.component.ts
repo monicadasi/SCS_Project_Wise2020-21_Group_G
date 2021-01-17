@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 declare var ol: any;
 import * as $ from 'jquery' 
-
+// import {AppService} from '../app.service';
+import {MatDialog} from '@angular/material/dialog';
+// import{DailogComponent} from '../dailog/dailog.component';
+import {fromLonLat} from 'ol/proj';
 @Component({
   selector: 'app-Home',
   templateUrl: './Home.component.html',
@@ -19,22 +22,25 @@ export class HomeComponent implements OnInit {
   mapLng = 9.2325;
   mapDefaultZoom = 18;
 
-  constructor() { }
+  Data;
+  featurePoint;
+  plotingPoints:any  = [];
+  schladming = [8.6821, 50.1109]; // longitude, latitude follow the order 
+  schladmingWebMercator = fromLonLat(this.schladming);
+  // constructor(private apservice:AppService,public dialog: MatDialog) { }
 
-  featurePoint = new ol.Feature({
-        geometry: new ol.geom.Point([-11407000,2520000])
-        //geometry: new ol.geom.Point([-12590727, 2281352])
-    });
-    featurePoint1 = new ol.Feature({
-      // geometry: new ol.geom.Point([-11407000,2520000])
-      geometry: new ol.geom.Point([-12590727, 2281352])
-  });
+ 
+  //   featurePoint1 = new ol.Feature({
+  //     geometry: new ol.geom.Point([-12590727, 2281352])
+  // });
 
    
   ngOnInit() {
    
-
-    
+    // this.Data = this.apservice.getSavedLocationDetails();
+   
+    var DataCopy = this;
+   
     var sourceFeatures = new ol.source.Vector()
     var layerFeatures = new ol.layer.Vector({
         source: sourceFeatures,
@@ -52,10 +58,19 @@ export class HomeComponent implements OnInit {
         source: sourceFeatures2
     });
 
-    this.featurePoint.setId('point 1');
-    this.featurePoint1.setId('point 2');
-    sourceFeatures.addFeatures([this.featurePoint]);
-    sourceFeatures.addFeatures([this.featurePoint1]);
+    // this.featurePoint.setId('point 1');
+    // this.featurePoint1.setId('point 2');
+    // sourceFeatures.addFeatures([this.featurePoint]);
+    // sourceFeatures.addFeatures([this.featurePoint1]);
+    this.Data.forEach(element => {
+      this.featurePoint = new ol.Feature({
+        geometry: new ol.geom.Point(fromLonLat([element.longitude,element.latitude]))
+        });
+      this.featurePoint.setId(element.id);
+      this.plotingPoints.push(this.featurePoint);
+      sourceFeatures.addFeatures([this.featurePoint]);
+    });
+
 
     this.map = new ol.Map({
       target: document.getElementById('map'),
@@ -67,8 +82,8 @@ export class HomeComponent implements OnInit {
           layerFeatures, layerFeatures2
       ],
       view: new ol.View({
-          center : [-11407508,2520388],
-          zoom : 5
+          center : this.schladmingWebMercator,
+          zoom : 12
       })
     });
 
@@ -83,18 +98,9 @@ export class HomeComponent implements OnInit {
           src: "assets/icon.png"
         })
       })
-  });
+    });
+
     this.map.addInteraction(hoverInteraction);
-
-      //   var featureOverlay = new ol.FeatureOverlay({
-      //     map: this.map,
-      //     style: this.geometryStyle
-      // });
-
-
-
-      //click
-
       var clickinter = new ol.interaction.Select({
         condition: ol.events.condition.click,
         layers: [layerFeatures, layerFeatures2],
@@ -107,57 +113,28 @@ export class HomeComponent implements OnInit {
           })
         })
     });
-      this.map.addInteraction(clickinter);
-  
-        //   var featureOverlay = new ol.FeatureOverlay({
-        //     map: this.map,
-        //     style: this.geometryStyle
-        // });
-        
+    this.map.addInteraction(clickinter);
         clickinter.on('select', function(evt){
             if(evt.selected.length > 0){
-              alert(evt.selected[0].getId() + " is clicked");
-                // console.info('selected: ' + evt.selected[0].getId());
-                
+              // this.popup(evt.selected[0].getId());
+              // alert(evt.selected[0].getId() + " is clicked");
+              DataCopy.Data.forEach(element => {
+                if(element.id == evt.selected[0].getId()){
+                  console.log(element);
+                  // DataCopy.dialog.open(DailogComponent);
+                  // const dialogRef = DataCopy.dialog.open(DailogComponent, {
+                  //   width: '250px',
+                  //   data: {name: "this.name", animal: "this.animal"}
+                  // });
+                }
+              });
             }
         });
-
-
-   
-
       this.map.on('pointermove', function(e) {
-        // if (e.dragging) return;
-           
         var pixel = this.getEventPixel(e.originalEvent);
         var hit = this.hasFeatureAtPixel(pixel);
-        
         this.getTarget().style.cursor = hit ? 'pointer' : '';
-    
-        // if(hit){
-        //     var pointer_coord = this.getEventCoordinate(e.originalEvent);
-        //     var closest = sourceFeatures.getClosestFeatureToCoordinate(pointer_coord);
-    
-        //     if(closest){
-        //         var geometry = closest.getGeometry();
-        //         var closest_coord = geometry.getClosestPoint(pointer_coord);
-                
-        //         // var coefficient = compareCoordinates(pointer_coord, closest_coord);
-        //         // console.info('closest: ' + closest.getId(), ' coeff: ' + coefficient);
-                
-        //         // if(between(coefficient, 0, 0.01)){
-        //         //     featureOverlay.addFeature(closest);
-                    
-        //         // } else {
-        //         //     featureOverlay.removeFeature(closest);
-        //         //     featureOverlay.getFeatures().clear();
-        //         //     hoverInteraction.getFeatures().clear();
-        //         // }
-        //     }
-        // }
     });
-
-
-
   }
 
   geometryStyle(feature){
@@ -178,8 +155,15 @@ export class HomeComponent implements OnInit {
           })
         })
     ];
-    
     return style[geometry_type];
+}
+
+popup(id){
+  this.Data.forEach(element => {
+    if(element.id == id){
+      console.log(element);
+    }
+  });
 }
 
 }

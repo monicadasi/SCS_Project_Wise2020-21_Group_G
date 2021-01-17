@@ -5,6 +5,7 @@ import {FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 import {DemoMaterialModule} from './material-module';
 
 import { LoginComponent } from './login/login.component';
@@ -19,6 +20,7 @@ import { HomeComponent } from './Home/Home.component';
    ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     DemoMaterialModule,
     AppRoutingModule,
     BrowserAnimationsModule,
