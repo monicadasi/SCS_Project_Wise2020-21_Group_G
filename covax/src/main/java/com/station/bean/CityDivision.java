@@ -2,7 +2,7 @@ package com.station.bean;
 
 import javax.persistence.Entity;
 
-@Entity
+//@Entity
 public class CityDivision {
 
 }
