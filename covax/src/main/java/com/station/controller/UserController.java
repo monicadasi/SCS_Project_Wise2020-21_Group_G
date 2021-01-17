@@ -38,6 +38,26 @@ public class UserController {
 		System.out.println(user);
 		return verifyLogin(user);
 	}
+	@RequestMapping(method = RequestMethod.POST, value = "/changePassword")
+	public Response changePassword(@RequestBody User user) {
+		userList=usrRepos.findByEmail(user.getEmail());
+		User retUser=fetchAndUpdate(userList,user);
+		return (retUser!=null)? Response.createSuccessResponse("Password change Successful!", retUser):
+			Response.createErrorResponse("Error in finding user!");
+		
+	}
+
+	private User fetchAndUpdate(List<User> userList,User user) {
+		// TODO Auto-generated method stub
+		if(userList.isEmpty()|| userList.size()>1) {
+			return null;
+		}
+		else {
+			User modUser=userList.get(0);
+			modUser.setPassword(user.getPassword());
+			return usrRepos.save(modUser);
+		}
+	}
 
 
 	private Response verifyLogin(User user) {
