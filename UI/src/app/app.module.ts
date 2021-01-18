@@ -11,12 +11,14 @@ import {DemoMaterialModule} from './material-module';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { HomeComponent } from './Home/Home.component';
+import { PasswordComponent } from './password/password.component';
 @NgModule({
   declarations: [					
     AppComponent,
       LoginComponent,
       SignupComponent,
-      HomeComponent
+      HomeComponent,
+      PasswordComponent,
    ],
   imports: [
     BrowserModule,

@@ -4,6 +4,7 @@ import {FormControl, Validators} from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {DataService} from '../dataservice.service';
 
 @Component({
   selector: 'app-login',
@@ -12,11 +13,19 @@ import { Observable } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
+
+  get data(): string {
+    return this.dataService.name;
+  }
+
+  set data(value: string) {
+    this.dataService.name = value;
+  }
   
   loginForm: any;
-
+  showErrorMessage = false;
   baseURL: string = "http://localhost:8080/user/";
-  constructor(private fb: FormBuilder, private route: ActivatedRoute,private router: Router, private http: HttpClient ) {
+  constructor(private fb: FormBuilder, private route: ActivatedRoute,private router: Router, private http: HttpClient, private dataService: DataService ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -37,10 +46,14 @@ export class LoginComponent implements OnInit {
       email: this.loginForm.get('username').value,
       password: this.loginForm.get('password').value
     }
+    var loginName = user.email.split('@');
+    this.data = loginName[0];
     this.loginPerson(user).subscribe(
       res => {
         if(res.status == 'success') {
         this.router.navigate(['/home']);
+        } else if(res.status == 'failure'){
+          this.showErrorMessage = true;
         }
       }
 );

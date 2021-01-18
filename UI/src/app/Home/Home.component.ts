@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 declare var ol: any;
-import * as $ from 'jquery' 
+import * as $ from 'jquery';
 // import {AppService} from '../app.service';
 import {MatDialog} from '@angular/material/dialog';
 // import{DailogComponent} from '../dailog/dailog.component';
 import {fromLonLat} from 'ol/proj';
+import {DataService} from '../dataservice.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-Home',
   templateUrl: './Home.component.html',
@@ -27,7 +29,7 @@ export class HomeComponent implements OnInit {
   plotingPoints:any  = [];
   schladming = [8.6821, 50.1109]; // longitude, latitude follow the order 
   schladmingWebMercator = fromLonLat(this.schladming);
-  // constructor(private apservice:AppService,public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private dataService: DataService, private router: Router) { }
 
  
   //   featurePoint1 = new ol.Feature({
@@ -58,6 +60,14 @@ export class HomeComponent implements OnInit {
         source: sourceFeatures2
     });
 
+     $(document.querySelector('#name')).html(this.dataService.name);
+     if (window.history && window.history.pushState) {
+
+      $(window).on('popstate', function() {
+        this.router.navigate(['/login']);
+       
+      });
+    }
     // this.featurePoint.setId('point 1');
     // this.featurePoint1.setId('point 2');
     // sourceFeatures.addFeatures([this.featurePoint]);
@@ -164,6 +174,10 @@ popup(id){
       console.log(element);
     }
   });
+}
+
+logout() {
+  this.router.navigate(['/login']);
 }
 
 }

@@ -7,10 +7,9 @@
     <a  routerLink="/setup_vaccine_station" routerLinkActive="active" class="nav-tab boxes smooth-inset-box-shadow">Setup vaccine station</a>
       <span class="spacer"></span>
       <div class="loginSection">
-      <span class="username">
-        gurushant.channale
+      <span class="username" id="name">
       </span>
-          <button mat-button>
+          <button mat-button (click)= "logout()">
         <mat-icon>logout</mat-icon>
       </button>
       </div>
