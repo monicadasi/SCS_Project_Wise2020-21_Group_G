@@ -7,7 +7,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.stereotype.Component;
 
-import com.station.repos.CityDistrictRepository;
+import com.station.repos.CityDivisionRepository;
 
 import javax.sql.DataSource;
 
@@ -17,16 +17,16 @@ public class InitializeData {
     @Autowired
     private DataSource dataSource;
     @Autowired
-    private CityDistrictRepository districtRepo;
+    private CityDivisionRepository divisionRepo;
 
     @EventListener(ApplicationReadyEvent.class)
     public void checkLoadNeeded() {
-    	if(districtRepo.count()==0) {
+    	if(divisionRepo.count()==0) {
     		loadData();
     	}
     }
     public void loadData() {
-            ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("districtdata.sql"));
+            ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("divisiondata.sql"));
         resourceDatabasePopulator.execute(dataSource);
     }
 }
