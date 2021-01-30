@@ -1,26 +1,39 @@
-
-
 <!-- <app-ol></app-ol> -->
 <mat-toolbar class="mat-elevation-z5 mattoolbar" color="primary">
-    <a routerLink="/home"  class="logo">Cova <span class="logo-span">X</span></a>
-    <a  routerLink="/home" routerLinkActive="active"  class="nav-tab boxes smooth-inset-box-shadow" style="margin-left: 2rem;">Home</a>
-    <a  routerLink="/setup_vaccine_station" routerLinkActive="active" class="nav-tab boxes smooth-inset-box-shadow">Setup vaccine station</a>
-      <span class="spacer"></span>
-      <div class="loginSection">
-      <span class="username" id="name">
-      </span>
-          <button mat-button (click)= "logout()">
-        <mat-icon>logout</mat-icon>
-      </button>
-      </div>
-  </mat-toolbar>
-  
-  <main>
-    <div id="map" class="map"><div id="popup"></div></div>
+  <a (click)="navigate('/home')"   class="logo">Cova <span class="logo-span">X</span></a>
+  <a  (click)="navigate('/home')" routerLinkActive="active"  class="nav-tab boxes smooth-inset-box-shadow" style="margin-left: 2rem;">Home</a>
+  <a  (click)="navigate('/setup_vaccine_station')"  routerLinkActive="active" class="nav-tab boxes smooth-inset-box-shadow">Setup vaccine station</a>
+    <span class="spacer"></span>
+    <div class="loginSection">
+    <span class="username">
+      {{UserName}}
+    </span>
+        <button mat-button>
+      <mat-icon>logout</mat-icon>
+    </button>
+    </div>
+</mat-toolbar>
+
+<main>
+  <div id="map" class="map"><div id="popup"></div></div>
 <div id="mouse-position"></div>
+
+</main>
+
+<mat-toolbar color="primary" class="mat-elevation-z5  mattoolbar1">
+  <span style="margin-left: 39rem;"><mat-icon>copyright</mat-icon> All rights reserved</span>	
+</mat-toolbar>
+
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close" (click)="closedailog()">&times;</span>
+    
+    <div>
+      Address : <span>{{address}}</span>
+    </div>
+  </div>
   
-  </main>
-  
-  <mat-toolbar color="primary" class="mat-elevation-z5  mattoolbar1">
-    <span style="margin-left: 39rem;"><mat-icon>copyright</mat-icon> All rights reserved</span>	
-  </mat-toolbar>
+
+</div>

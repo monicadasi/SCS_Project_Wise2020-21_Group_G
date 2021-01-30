@@ -43,8 +43,9 @@ public class LocationController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/getLocation")
 	public Response getUserLocation(@RequestBody User user) {
-		System.out.println(user);
+		
 		userLocationList = usrLocationRepos.findByUserId(user.getId());
+		System.out.println(userLocationList);
 		return (userLocationList.size() == 0) ? Response.createErrorResponse("User Not Found!")
 				: Response.createSuccessResponse("User Found", usrLocationRepos.findByUserId(user.getId()));
 	}

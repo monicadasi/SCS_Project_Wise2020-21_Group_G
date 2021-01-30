@@ -12,6 +12,8 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { HomeComponent } from './Home/Home.component';
 import { PasswordComponent } from './password/password.component';
+import { SetupVaccineStationComponent } from './setup-vaccine-station/setup-vaccine-station.component';
+import { DailogComponent } from './dailog/dailog.component';
 @NgModule({
   declarations: [					
     AppComponent,
@@ -19,7 +21,10 @@ import { PasswordComponent } from './password/password.component';
       SignupComponent,
       HomeComponent,
       PasswordComponent,
+      SetupVaccineStationComponent,
+      DailogComponent
    ],
+   entryComponents: [DailogComponent],
   imports: [
     BrowserModule,
     HttpClientModule,

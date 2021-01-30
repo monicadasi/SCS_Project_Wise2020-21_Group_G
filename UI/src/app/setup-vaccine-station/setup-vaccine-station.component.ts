@@ -6,7 +6,6 @@ import {MatDialog} from '@angular/material/dialog';
 import{DailogComponent} from '../dailog/dailog.component';
 import {fromLonLat} from 'ol/proj';
 import {ZoomSlider,OlZoom} from 'ol/control';
-
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {FormControl, Validators} from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
@@ -15,16 +14,17 @@ import { Observable } from 'rxjs';
 import {DataService} from '../dataservice.service';
 
 @Component({
-  selector: 'app-Home',
-  templateUrl: './Home.component.html',
-  styleUrls: ['./Home.component.scss']
+  selector: 'app-setup-vaccine-station',
+  templateUrl: './setup-vaccine-station.component.html',
+  styleUrls: ['./setup-vaccine-station.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class SetupVaccineStationComponent implements OnInit {
 
+  UserName = "";
   title = 'AppUI';
   latitude: number = 50.1109;
   longitude: number = 8.6821;
-
+  displaymap = false;
   map: any;
 
   mapLat = 48.7776;
@@ -33,19 +33,19 @@ export class HomeComponent implements OnInit {
 
   Data;
   featurePoint;
-  modal;
-  address;
   plotingPoints:any  = [];
+  sourceFeatures;
+  selected;
   schladming = [8.6821, 50.1109]; // longitude, latitude follow the order 
   schladmingWebMercator = fromLonLat(this.schladming);
+  baseURL: string = "http://localhost:8080/userLocation/";
+  modal;
+  address;
   constructor(private apservice:AppService,public dialog: MatDialog,private fb: FormBuilder, 
     private route: ActivatedRoute,private router: Router, 
-    private http: HttpClient, private dataService: DataService ) { }
-  baseURL: string = "http://localhost:8080/userLocation/";
-    UserName = "";
-  //   featurePoint1 = new ol.Feature({
-  //     geometry: new ol.geom.Point([-12590727, 2281352])
-  // });
+    private http: HttpClient, private dataService: DataService) { }
+
+ 
 
    
   ngOnInit() {
@@ -55,33 +55,13 @@ export class HomeComponent implements OnInit {
         this.modal.style.display = "none";
       }
     }
+    this.Data = this.apservice.getSavedLocationDetails();
     this.UserName = this.apservice.getUserName();
-    // this.Data = this.apservice.getSavedLocationDetails();
-    var user = {
-      id: 1
-    }
-
-
-    this.GetLocationPoints(user).subscribe(
-      res => {
-        console.log(res);
-        this.Data = res.data;
-        this.Data.forEach(element => {
-          this.featurePoint = new ol.Feature({
-            geometry: new ol.geom.Point(fromLonLat([element.longitude,element.latitude]))
-            });
-          this.featurePoint.setId(element.id);
-          this.plotingPoints.push(this.featurePoint);
-          sourceFeatures.addFeatures([this.featurePoint]);
-        });
-      }
-);
-
     var DataCopy = this;
    
-    var sourceFeatures = new ol.source.Vector()
+     this.sourceFeatures = new ol.source.Vector()
     var layerFeatures = new ol.layer.Vector({
-        source: sourceFeatures,
+        source: this.sourceFeatures,
         style: new ol.style.Style({
           image: new ol.style.Icon({
             anchor: [0.5, 0.5],
@@ -117,8 +97,6 @@ export class HomeComponent implements OnInit {
           zoom : 12
       })
     });
-    // var zoomslider = new ol.control.ZoomSlider();
-    // this.map.addControl(zoomslider);
 
     var hoverInteraction = new ol.interaction.Select({
       condition: ol.events.condition.pointerMove,
@@ -154,9 +132,10 @@ export class HomeComponent implements OnInit {
               DataCopy.Data.forEach(element => {
                 if(element.id == evt.selected[0].getId()){
                   console.log(element);
+                  // DataCopy.dialog.open(DailogComponent);
+                  // this.opendailog();
                   DataCopy.address = element.address;
                   DataCopy.modal.style.display = "block";
-                  // DataCopy.dialog.open(DailogComponent);
                   // const dialogRef = DataCopy.dialog.open(DailogComponent, {
                   //   width: '250px',
                   //   data: {name: "this.name", animal: "this.animal"}
@@ -172,46 +151,49 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  geometryStyle(feature){
-    var
-        style = [],
-        geometry_type = feature.getGeometry().getType(),
-        white = [255, 255, 255, 1],
-        blue = [0, 153, 255, 1],
-        width = 3;
-        
-    style['Point'] = [
-        new ol.style.Style({
-          image: new ol.style.Icon({
-            anchor: [0.5, 0.5],
-            anchorXUnits: "fraction",
-            anchorYUnits: "fraction",
-            src: "assets/marker.png"
-          })
-        })
-    ];
-    return style[geometry_type];
-}
-closedailog(){
-  this.modal.style.display = "none";
-}
-GetLocationPoints(user: { id: any}): Observable<any> {
-  const headers = { 'content-type': 'application/json'};
-  return this.http.post(this.baseURL + 'getLocation', user,{'headers':headers})
-}
+  opendailog(){
+    this.modal.style.display = "block";
+  }
+  closedailog(){
+    this.modal.style.display = "none";
+  }
+  DisplayLOcation(){
+    // this.displaymap = true;
+    // this.GetLocationToSetUpVStation();
+    this.Data.forEach(element => {
+      this.featurePoint = new ol.Feature({
+        geometry: new ol.geom.Point(fromLonLat([element.longitude,element.latitude]))
+        });
+      this.featurePoint.setId(element.id);
+      this.plotingPoints.push(this.featurePoint);
+      this.sourceFeatures.addFeatures([this.featurePoint]);
+    });
+  }
 
-popup(id){
-  this.Data.forEach(element => {
-    if(element.id == id){
-      console.log(element);
+  GetLocationToSetUpVStation(){
+    var LocationSearch = {
+      cityName: this.selected
     }
-  });
+    this.GetVStations(LocationSearch).subscribe(
+      res => {
+        console.log(res);
+        this.Data.forEach(element => {
+          this.featurePoint = new ol.Feature({
+            geometry: new ol.geom.Point(fromLonLat([element.longitude,element.latitude]))
+            });
+          this.featurePoint.setId(element.id);
+          this.plotingPoints.push(this.featurePoint);
+          this.sourceFeatures.addFeatures([this.featurePoint]);
+        });
+      }
+  );
+  }
+  GetVStations(LocationSearch: { cityName: any}): Observable<any> {
+    const headers = { 'content-type': 'application/json'};
+    return this.http.post(this.baseURL + 'getLocation', LocationSearch,{'headers':headers})
+  }
+ 
+
 }
 
-navigate(routlink){
-  this.router.navigate([routlink]);
-  // this.router.navigate(['/setup_vaccine_station']);
-}
-
-}
 

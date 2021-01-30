@@ -5,6 +5,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {DataService} from '../dataservice.service';
+import {AppService} from '../app.service';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +26,7 @@ export class LoginComponent implements OnInit {
   loginForm: any;
   showErrorMessage = false;
   baseURL: string = "http://localhost:8080/user/";
-  constructor(private fb: FormBuilder, private route: ActivatedRoute,private router: Router, private http: HttpClient, private dataService: DataService ) {
+  constructor(private fb: FormBuilder,private appService:AppService, private route: ActivatedRoute,private router: Router, private http: HttpClient, private dataService: DataService ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -50,8 +51,13 @@ export class LoginComponent implements OnInit {
     this.data = loginName[0];
     this.loginPerson(user).subscribe(
       res => {
+        var userid = res.data.id;
+        var username = res.data.firstName + " " + res.data.lastName;
+        this.appService.SetUserId(userid);
+        this.appService.setUserName(username);
+        console.log(userid, username);
         if(res.status == 'success') {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/setup_vaccine_station']);
         } else if(res.status == 'failure'){
           this.showErrorMessage = true;
         }
