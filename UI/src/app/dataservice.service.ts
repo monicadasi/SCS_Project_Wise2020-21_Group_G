@@ -4,7 +4,14 @@ import { Injectable } from '@angular/core';
     providedIn: 'root'
   })
 export class DataService {
-name:string
+name:string;
+firstName;
+middleName;
+lastName;
+emailStore;
+mobile;
+passwordStore;
+
   constructor() { }
 
   

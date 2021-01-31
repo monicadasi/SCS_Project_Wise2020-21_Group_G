@@ -1,0 +1,24 @@
+<div>
+    <div class="login-dark">
+      <form>
+        <h2 class="sr-only">Login Form</h2>
+      <div class="title">Verify Email Address</div>
+      <div style="margin-bottom: 18px;">
+        <mat-form-field appearance="outline" style="margin-right: 18%;">
+          <mat-label>Enter OTP</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'"  [formControl]="otp" required>
+          <mat-error *ngIf="otp.invalid">{{getOtpErrorMessage()}}</mat-error>
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+  </div> 
+  <div class="row">
+    <button style="float: right;float: right;margin-right: 1.4rem;width: 10rem;" (click)="enterOTP()"  mat-raised-button color="primary">Register</button>
+  </div> 
+  <div class="row">
+    <a  style="float: right;float: right;margin-right: 1.4rem;width: 14rem;" routerLink="/login" routerLinkActive="active">Login</a>
+  </div>  
+</form>
+</div>
+</div>
