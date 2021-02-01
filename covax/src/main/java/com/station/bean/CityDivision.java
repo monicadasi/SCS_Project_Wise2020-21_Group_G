@@ -1,6 +1,7 @@
 package com.station.bean;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -8,10 +9,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
 import com.station.services.ListToStringConverter;
+import com.station.utility.DisplacementCalculator;
 
 @Entity
+//@NamedQuery(name = "CityDivision.findAll", query="select c from CityDivision c order by c.population desc")
 public class CityDivision {
 
 	@Id
@@ -30,9 +34,9 @@ public class CityDivision {
 	@Column
 	double populationDensity;
 	@Column
-	String latitude;
+	double latitude;
 	@Column
-	String longitude;
+	double longitude;
 	public Long getId() {
 		return id;
 	}
@@ -69,23 +73,35 @@ public class CityDivision {
 	public void setPostalCodes(List<String> postalCodes) {
 		this.postalCodes = postalCodes;
 	}
-	public String getLatitude() {
-		return latitude;
-	}
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
-	}
-	public String getLongitude() {
-		return longitude;
-	}
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
-	}
+
 	public List<String> getCityDistricts() {
 		return cityDistricts;
 	}
 	public void setCityDistricts(List<String> cityDistricts) {
 		this.cityDistricts = cityDistricts;
 	}
-	
+	public double getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+	public double getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+	public CityDivision combineWithAnother(CityDivision other) {
+		this.name+=", "+other.name;
+		this.area+=other.area;
+		this.population+=other.population;
+		this.populationDensity=(this.population/this.area);
+		this.postalCodes.addAll(other.postalCodes);
+		this.cityDistricts.addAll(other.cityDistricts);
+		Map<String,Double> midPoint=DisplacementCalculator.midPoint(this.latitude, this.longitude, other.latitude, other.longitude);
+		this.latitude=midPoint.get("latitude");
+		this.longitude=midPoint.get("longtitude");
+		return this;
+	}
 }
