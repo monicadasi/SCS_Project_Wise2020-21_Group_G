@@ -15,9 +15,9 @@ public class LocationInfo {
 	@Column
 	Long userId;
 	@Column
-	String latitude;
+	Double latitude;
 	@Column
-	String longitude;
+	Double longitude;
 	@Column
 	String address;
 
@@ -51,19 +51,19 @@ public class LocationInfo {
 		this.userId = userId;
 	}
 
-	public String getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(String latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 
-	public String getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(String longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 

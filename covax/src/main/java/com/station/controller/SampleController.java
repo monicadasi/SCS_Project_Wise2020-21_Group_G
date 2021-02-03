@@ -1,5 +1,6 @@
 package com.station.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,16 @@ public class SampleController {
 	@RequestMapping("/working")
 	public String isWorking() {
 		System.out.println("got req");
+		// test
+		List<String> postalCodes = new ArrayList<String>();
+		postalCodes.add("60487");
+		postalCodes.add("60311");
+		postalCodes.add("60318");
+		postalCodes.add("60316");
+		postalCodes.add("60528");
+		postalCodes.add("60389");
+		postalCodes.add("60431");
+		LocationController.osmMapDataQueryProcessing("Frankfurt am Main", postalCodes);
 		return "{\"value\":\"WORKING\"}";
 	}
 	@RequestMapping("/divisions")
