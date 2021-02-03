@@ -4,10 +4,9 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.station.bean.LocationInfo;
+import com.station.bean.SaveUserLocationData;
 
-public interface UserLocationRepository extends JpaRepository<LocationInfo, Long>{
+public interface UserLocationRepository extends JpaRepository<SaveUserLocationData, Long>{
 	
-	public List<LocationInfo> findByUserId(Long userId);
-	//public List<LocationInfo> findByCity(String cityName);
+	public List<SaveUserLocationData> findByUserId(Long userId);
 }

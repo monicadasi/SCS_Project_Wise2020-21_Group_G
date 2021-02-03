@@ -7,7 +7,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.stereotype.Component;
 
+import com.station.controller.LocationController;
 import com.station.repos.CityDivisionRepository;
+import com.station.repos.CityNodesRepository;
 
 import javax.sql.DataSource;
 
@@ -18,11 +20,16 @@ public class InitializeData {
     private DataSource dataSource;
     @Autowired
     private CityDivisionRepository divisionRepo;
-
+    @Autowired
+    private CityNodesRepository cityNodesRepo;
+    
     @EventListener(ApplicationReadyEvent.class)
     public void checkLoadNeeded() {
     	if(divisionRepo.count()==0) {
     		loadData();
+    	}
+    	if(cityNodesRepo.count() == 0) {
+    		cityNodesRepo.saveAll(LocationController.searchStations());
     	}
     }
     public void loadData() {

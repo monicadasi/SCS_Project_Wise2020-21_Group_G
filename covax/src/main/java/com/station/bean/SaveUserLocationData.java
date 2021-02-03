@@ -1,7 +1,5 @@
 package com.station.bean;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,22 +9,24 @@ import javax.persistence.Id;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class LocationInfo {
+@Entity
+public class SaveUserLocationData {
 
+	@Column
 	Long userId;
+	@Column
 	Integer allowed;
-	Long id;
-	List<CityNodes> cityInfo;
-	
-	
-	public List<CityNodes> getCityInfo() {
-		return cityInfo;
-	}
+	@Column
+	Double latitude;
+	@Column
+	Double longitude;
+	@Column
+	String address;
 
-	public void setCityInfo(List<CityNodes> cityInfo) {
-		this.cityInfo = cityInfo;
-	}	
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Long id;
+
 	public Long getId() {
 		return id;
 	}
@@ -34,7 +34,7 @@ public class LocationInfo {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public Integer getAllowed() {
 		return allowed;
 	}
@@ -51,8 +51,5 @@ public class LocationInfo {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
-	}	
-
+	}
 }
-
-
