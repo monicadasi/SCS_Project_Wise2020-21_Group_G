@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component, OnInit} from '@angular/core';
+import { AbstractControlOptions, FormBuilder, FormGroup } from '@angular/forms';
 import {FormControl, Validators} from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from './user';
 import { Observable } from 'rxjs';
 import {DataService} from '../dataservice.service';
+import {MustMatch} from '../passwordMatch';
+import Swal from 'sweetalert2';
 import * as $ from 'jquery';
 @Component({
   selector: 'app-signup',
@@ -70,22 +72,21 @@ export class SignupComponent implements OnInit {
   hide = true;
   baseURL: string = "http://localhost:8080/";
   constructor(private fb: FormBuilder, private route: ActivatedRoute,private router: Router,private http: HttpClient, private dataService: DataService) {}
-  FirstName;
-  MidName;
-  LastName;
-  email;
-  phNumber;
-  password;
-  Conf_password;
+  registrationForm;
+  submitted = false;
 
   ngOnInit() {
-    this.FirstName = new FormControl('', [Validators.required]);
-    this.MidName = new FormControl('');
-    this.LastName = new FormControl('', [Validators.required]);
-    this.email = new FormControl('', [Validators.required, Validators.email]);
-    this.phNumber = new FormControl('', [Validators.required]);
-    this.password = new FormControl('', [Validators.required]);
-    this.Conf_password =  new FormControl('', [Validators.required]);
+    this.registrationForm = this.fb.group({
+    firstName: ['', [Validators.required, Validators.pattern('[a-zA-Z]+')]],
+    midName: ['',[Validators.pattern('[a-zA-Z]+')]],
+    lastName:['', [Validators.required,Validators.pattern('[a-zA-Z]+')]],
+    email: ['', [Validators.required, Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+    phNumber: ['', [Validators.required, Validators.minLength(12), Validators.pattern('[- +()0-9]+')]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+    confPassword: ['', [Validators.required]]
+    },{
+      validator: MustMatch('password', 'confPassword')
+  } as AbstractControlOptions)
     if (window.history && window.history.pushState) {
 
       $(window).on('popstate', function() {
@@ -94,49 +95,77 @@ export class SignupComponent implements OnInit {
       });
     }
   }
-
-
+ 
   getEmailErrorMessage() {
-    if (this.email.hasError('required')) {
+    if (this.registrationForm.get('email').value.hasError('required')) {
       return 'You must enter a value';
     }
 
-    return this.email.hasError('email') ? 'Not a valid email' : '';
+    return this.registrationForm.get('email').value.hasError('email') ? 'Not a valid email' : '';
   }
   
   getPasswordErrorMessage() {
-    if (this.email.hasError('required')) {
+    if (this.registrationForm.get('email').value.hasError('required')) {
       return 'You must enter a value';
     }
 
-    return this.email.hasError('email') ? 'Not a valid email' : '';
+    return this.registrationForm.get('email').value.hasError('email') ? 'Not a valid email' : '';
   }
 
   getConfPasswordErrorMessage() {
-    if (this.email.hasError('required')) {
+    if (this.registrationForm.get('email').value.hasError('required')) {
       return 'You must enter a value';
     }
 
-    return this.email.hasError('email') ? 'Not a valid email' : '';
+    return this.registrationForm.get('email').value.hasError('email') ? 'Not a valid email' : '';
   }
 
   addPerson(user:{email: string}): Observable<any> {
     const headers = { 'content-type': 'application/json'};
-    console.log(this.FirstName.value);
+    console.log(this.registrationForm.get('firstName').value);
     return this.http.post(this.baseURL + 'sendtoken', user,{'headers':headers})
   }
 
+  successAlertNotification(){
+      Swal.fire({
+        title: 'OTP',
+        text: 'has been sent to your email successfully',
+        icon: 'success',
+        showCancelButton: false,
+        confirmButtonText: 'OK'
+      }).then((result) => {
+        if(result.value) {
+          this.router.navigate(['/otp']);
+        }
+      });
+  }
+
+  passwordAlertNotification(){
+    Swal.fire('Passwords', "doesn't match", "error");
+  }
+
+  get f() { return this.registrationForm.controls; }
+
+  onSubmit() {
+        this.submitted = true;
+
+        // stop here if form is invalid
+        if (this.registrationForm.invalid) {
+            return;
+        }
+        this.signup();
+    }
   signup() {
-     this.firstName = this.FirstName.value,
-     this.middleName = this.MidName.value,
-     this.lastName = this.LastName.value,
-     this.emailStore = this.email.value,
-     this.mobile = this.phNumber.value,
-     this.passwordStore = this.Conf_password.value
-     this.addPerson({email: this.email.value}).subscribe(
+     this.firstName = this.registrationForm.get('firstName').value,
+     this.middleName = this.registrationForm.get('midName').value,
+     this.lastName = this.registrationForm.get('lastName').value,
+     this.emailStore = this.registrationForm.get('email').value,
+     this.mobile = this.registrationForm.get('phNumber').value,
+     this.passwordStore = this.registrationForm.get('confPassword').value
+     this.addPerson({email: this.registrationForm.get('email').value}).subscribe(
       res => {
         if(res.status == 'success') {
-          this.router.navigate(['/otp']);
+         this.successAlertNotification();
         }
       }
 );

@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {DataService} from '../dataservice.service';
 import {AppService} from '../app.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -25,11 +26,12 @@ export class LoginComponent implements OnInit {
   
   loginForm: any;
   showErrorMessage = false;
+  submitted = false;
   baseURL: string = "http://localhost:8080/user/";
   constructor(private fb: FormBuilder,private appService:AppService, private route: ActivatedRoute,private router: Router, private http: HttpClient, private dataService: DataService ) {
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
+      username: ['',[Validators.required,Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+      password: ['', [Validators.required,Validators.minLength(8)]]
     });
   }
 
@@ -41,6 +43,22 @@ export class LoginComponent implements OnInit {
     return this.http.post(this.baseURL + 'login', user,{'headers':headers})
   }
 
+  errorAlertNotification(){
+    Swal.fire('User', 'does not exists', 'error');
+}
+
+  get f() { return this.loginForm.controls; }
+
+  onSubmit() {
+        this.submitted = true;
+
+        // stop here if form is invalid
+        if (this.loginForm.invalid) {
+            return;
+        }
+        this.login();
+    }
+
   login() {
     console.log(this.loginForm.get('username').value);
     var user = {
@@ -51,6 +69,7 @@ export class LoginComponent implements OnInit {
     this.data = loginName[0];
     this.loginPerson(user).subscribe(
       res => {
+        if (res.data) {
         var userid = res.data.id;
         var username = res.data.firstName + " " + res.data.lastName;
         this.appService.SetUserId(userid);
@@ -61,6 +80,9 @@ export class LoginComponent implements OnInit {
         } else if(res.status == 'failure'){
           this.showErrorMessage = true;
         }
+      } else {
+        this.errorAlertNotification();
+       }
       }
 );
     }

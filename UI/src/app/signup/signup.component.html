@@ -1,47 +1,69 @@
 <div>
     <div class="login-dark">
-      <form>
+      <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
         <h2 class="sr-only">Login Form</h2>
       <div class="title">Covax Registration</div>
       <div style="margin-bottom: 18px;">
         <mat-form-field appearance="standard" style="margin-right: 40px;">
           <mat-label>First Name</mat-label>
-          <input matInput placeholder="First Name" [formControl]="FirstName" required>
+          <input matInput placeholder="First Name" formControlName="firstName" required [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }">
+          <!-- <div *ngIf="submitted && f.firstName.errors" id="invalid-feedback"> -->
+            <mat-error *ngIf="f.firstName.errors && f.firstName.errors.required">FirstName is required</mat-error>
+            <mat-error *ngIf="f.firstName.errors && f.firstName.errors.pattern">Must enter a valid first name</mat-error>
+          <!-- </div> -->
         </mat-form-field>
         <mat-form-field appearance="standard" style="margin-right: 40px;">
           <mat-label>Middle Name</mat-label>
-          <input matInput placeholder="Middle Name" [formControl]="MidName" >
+          <input matInput placeholder="Middle Name" formControlName="midName" >
+          <mat-error *ngIf="f.midName.errors && f.midName.errors.pattern">Must enter a valid middle name</mat-error>
         </mat-form-field>
         <mat-form-field appearance="standard" >
           <mat-label>Last Name</mat-label>
-          <input matInput placeholder="Last Name" [formControl]="LastName" required>
+          <input matInput placeholder="Last Name" formControlName="lastName" required [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }">
+          <!-- <div *ngIf="submitted && f.lastName.errors" id="invalid-feedback"> -->
+            <mat-error *ngIf="f.lastName.errors && f.lastName.errors.required">LastName is required</mat-error>
+            <mat-error *ngIf="f.lastName.errors && f.lastName.errors.pattern">Must enter a valid last name</mat-error>
+          <!-- </div> -->
         </mat-form-field>
   </div>
   <div style="margin-bottom: 18px;">
           <mat-form-field appearance="outline" style="width: 240px;margin-right: 18%;">
             <mat-label>Enter Your Email</mat-label>
-            <input matInput placeholder="pat@example.com" [formControl]="email" required>
-            <mat-error *ngIf="email.invalid">{{getEmailErrorMessage()}}</mat-error>
+            <input matInput placeholder="pat@example.com" formControlName="email" required [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+            <!-- <div *ngIf="submitted && f.email.errors" id="invalid-feedback"> -->
+              <mat-error *ngIf="f.email.errors && f.email.errors.required">Email is required</mat-error>
+              <mat-error *ngIf="f.email.errors && f.email.errors.pattern">Must enter a valid Email</mat-error>
+            <!-- </div> -->
           </mat-form-field>
           <mat-form-field appearance="outline" style="width: 240px;">
             <mat-label>Enter Your Phone Number</mat-label>
-            <input matInput placeholder="+491267345986" [formControl]="phNumber" required>
-            <mat-error *ngIf="email.phNumber">{{getEmailErrorMessage()}}</mat-error>
+            <input matInput placeholder="+491267345986" formControlName="phNumber" required [ngClass]="{ 'is-invalid': submitted && f.phNumber.errors }">
+            <!-- <div *ngIf="submitted && f.phNumber.errors" role="alert"> -->
+              <mat-error *ngIf="f.phNumber.errors && f.phNumber.errors.required">Phone Number is required</mat-error>
+              <mat-error *ngIf="f.phNumber.errors && f.phNumber.errors.pattern">Must enter a valid Phone Number with at least 12 numbers</mat-error>
+              <mat-error *ngIf="f.phNumber.errors && f.phNumber.errors.minlength">Phone Number must be at least 12 numbers</mat-error>
+            <!-- </div> -->
           </mat-form-field>
   </div>
-  <div >
+  <div>
           <mat-form-field appearance="outline" style="margin-right: 18%;">
             <mat-label>Enter your password</mat-label>
-            <input matInput [type]="hide ? 'password' : 'text'"  [formControl]="password" required>
-            <mat-error *ngIf="email.invalid">{{getPasswordErrorMessage()}}</mat-error>
+            <input matInput [type]="hide ? 'password' : 'text'"  formControlName="password" required [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
+            <!-- <div class="field-message" *ngIf="submitted && f.password.errors"> -->
+              <mat-error *ngIf="f.password.errors && f.password.errors.required">Password is required</mat-error>
+              <mat-error *ngIf="f.password.errors && f.password.errors.minlength">Password must be at least 8 characters</mat-error>
+            <!-- </div> -->
             <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Confirm password</mat-label>
-            <input matInput [type]="hide ? 'password' : 'text'"  [formControl]="Conf_password" required>
-            <mat-error *ngIf="email.invalid">{{getPasswordErrorMessage()}}</mat-error>
+            <input matInput [type]="hide ? 'password' : 'text'"  formControlName="confPassword" required [ngClass]="{ 'is-invalid': submitted && f.confPassword.errors }">
+            <!-- <div *ngIf="submitted && f.confPassword.errors"> -->
+              <mat-error *ngIf="f.confPassword.errors && f.confPassword.errors.required">Confirm Password is required</mat-error>
+              <mat-error *ngIf="f.confPassword.errors && f.confPassword.errors.mustMatch">Passwords must match</mat-error>
+            <!-- </div> -->
             <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
@@ -49,7 +71,7 @@
     </div> 
     <div style="float: right;">
     <div class="row">
-    <button style="float: right;float: right;margin-right: 1.4rem;width: 10rem;" (click)="signup()"  mat-raised-button color="primary">Verify Email</button>
+    <button style="float: right;float: right;margin-right: 1.4rem;width: 10rem;"  mat-raised-button color="primary">Verify Email</button>
      </div> 
     <div class="row">
       <a  style="float: right;float: right;margin-right: 1.4rem;width: 14rem;" routerLink="/password" routerLinkActive="active">Forgot your password?</a>

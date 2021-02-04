@@ -4,6 +4,7 @@ import {FormControl, Validators} from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {DataService} from '../dataservice.service';
+import Swal from 'sweetalert2';
 import { Observable } from 'rxjs';
 import * as $ from 'jquery';
 
@@ -53,9 +54,64 @@ export class OtpComponent implements OnInit {
     return this.http.post(this.baseURL + 'registration', user,{'headers':headers})
   }
 
+  changePassword(): Observable<any> {
+    var user = 
+    { email: this.dataService.emailStore, 
+      password: this.dataService.passwordStore 
+    }
+    const headers = { 'content-type': 'application/json'};
+    return this.http.post(this.baseURL + 'changePassword', user,{'headers':headers})
+  }
+
   verifyOtp(user: { email: string, tokenValue }): Observable<any> {
     const headers = { 'content-type': 'application/json'};
     return this.http.post('http://localhost:8080/' + 'verifytoken', user,{'headers':headers})
+  }
+
+  successAlertNotification(){
+    Swal.fire('OTP', 'has been sent to your email successfully', 'success')
+  }
+
+  registerAlertNotification(){
+    Swal.fire({
+      title: 'User',
+      text: 'registered successfully',
+      icon: 'success',
+      showCancelButton: false,
+      confirmButtonText: 'OK'
+    }).then((result) => {
+      if(result.value) {
+        this.router.navigate(['/login']);
+      }
+    });
+  }
+
+  errorAlertNotification(){
+    Swal.fire({
+      title: 'User',
+      text: 'already exists.',
+      icon: 'error',
+      showCancelButton: false,
+      confirmButtonText: 'OK'
+    }).then((result) => {
+      if(result.value) {
+        this.router.navigate(['/login']);
+      }
+    });
+  }
+
+  passwordAlertNotification(){
+    Swal.fire({
+      title: 'Password',
+      text: 'changed successfully',
+      icon: 'success',
+      showCancelButton: false,
+      confirmButtonText: 'OK'
+    }).then((result) => {
+      if(result.value) {
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   enterOTP() {
@@ -67,14 +123,26 @@ export class OtpComponent implements OnInit {
     this.verifyOtp(user).subscribe(
       res => {
         if(res.status == 'success') {
+          if (this.dataService.firstName) {
           this.addPerson().subscribe(
             res => {
               if(res.status == 'success') {
-                this.router.navigate(['/login']);
+                this.registerAlertNotification();
+              }else {
+                this.errorAlertNotification();
               }
             }
           );
+        } else {
+          this.changePassword().subscribe(
+            res => {
+              if(res.status == 'success') {
+                this.passwordAlertNotification();
+              }
+            }
+          )
         }
+       } 
       }
 );
   }
