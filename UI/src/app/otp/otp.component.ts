@@ -68,6 +68,11 @@ export class OtpComponent implements OnInit {
     return this.http.post('http://localhost:8080/' + 'verifytoken', user,{'headers':headers})
   }
 
+  resendOtp(user:{email: string}): Observable<any> {
+    const headers = { 'content-type': 'application/json'};
+    return this.http.post('http://localhost:8080/' + 'sendtoken', user,{'headers':headers})
+  }
+
   successAlertNotification(){
     Swal.fire('OTP', 'has been sent to your email successfully', 'success')
   }
@@ -100,6 +105,10 @@ export class OtpComponent implements OnInit {
     });
   }
 
+  errorOtpAlertNotification(){
+    Swal.fire('OTP', 'verification failed', 'error');
+  }
+
   passwordAlertNotification(){
     Swal.fire({
       title: 'Password',
@@ -122,7 +131,7 @@ export class OtpComponent implements OnInit {
     
     this.verifyOtp(user).subscribe(
       res => {
-        if(res.status == 'success') {
+        if(res.status == 'success' && res.message == 'Token verified') {
           if (this.dataService.firstName) {
           this.addPerson().subscribe(
             res => {
@@ -142,7 +151,19 @@ export class OtpComponent implements OnInit {
             }
           )
         }
-       } 
+       } else {
+           this.errorOtpAlertNotification();
+       }
+      }
+);
+  }
+
+  sendOTP() {
+    this.resendOtp({email: this.dataService.emailStore}).subscribe(
+      res => {
+        if(res.status == 'success') {
+          this.successAlertNotification();
+        }
       }
 );
   }
