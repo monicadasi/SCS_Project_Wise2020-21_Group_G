@@ -26,20 +26,20 @@ public class SampleController {
 	CityDivisionRepository cityDivisionrepo;
 	@Autowired
 	LocationRecommender locationRecommender;
+	@Autowired
+	LocationController locationController;
 
 	@RequestMapping("/working")
 	public String isWorking() {
 		System.out.println("got req");
 		// test
-		List<String> postalCodes = new ArrayList<String>();
-		postalCodes.add("60487");
-		postalCodes.add("60311");
-		postalCodes.add("60318");
-		postalCodes.add("60316");
-		postalCodes.add("60528");
-		postalCodes.add("60389");
-		postalCodes.add("60431");
-		LocationController.osmMapDataQueryProcessing("Frankfurt am Main", postalCodes);
+		/*
+		 * List<String> postalCodes = new ArrayList<String>(); postalCodes.add("60487");
+		 * postalCodes.add("60311"); postalCodes.add("60318"); postalCodes.add("60316");
+		 * postalCodes.add("60528"); postalCodes.add("60389"); postalCodes.add("60431");
+		 * LocationController.osmMapDataQueryProcessing("Frankfurt am Main",
+		 * postalCodes);
+		 */
 		return "{\"value\":\"WORKING\"}";
 	}
 	@RequestMapping("/divisions")
@@ -53,6 +53,11 @@ public class SampleController {
 		Map<CityDivision,Integer> vals=locationRecommender.findRecommendations(null, stations);
 		vals.forEach((k,v) -> System.out.println(k.getName()+"-"+v)) ;
 		return vals.keySet();
+	}
+	@RequestMapping("/covaxSearch")
+	public List<CityDivision> getLocationByCityName() {
+		System.out.println("got req");
+		return cityDivisionrepo.findAll();
 	}
 	
 }
