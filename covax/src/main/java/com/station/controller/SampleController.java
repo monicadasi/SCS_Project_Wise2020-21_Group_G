@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.station.bean.CityDivision;
+import com.station.bean.LocationSearch;
 import com.station.repos.CityDivisionRepository;
 import com.station.services.LocationRecommender;
 
@@ -40,6 +41,9 @@ public class SampleController {
 		 * LocationController.osmMapDataQueryProcessing("Frankfurt am Main",
 		 * postalCodes);
 		 */
+		LocationSearch loc = new LocationSearch();
+		loc.setCityName("Frankfurt am Main");
+		locationController.getLocationByCityName(loc);
 		return "{\"value\":\"WORKING\"}";
 	}
 	@RequestMapping("/divisions")
@@ -56,7 +60,7 @@ public class SampleController {
 	}
 	@RequestMapping("/covaxSearch")
 	public List<CityDivision> getLocationByCityName() {
-		System.out.println("got req");
+	//	System.out.println("got req");
 		return cityDivisionrepo.findAll();
 	}
 	

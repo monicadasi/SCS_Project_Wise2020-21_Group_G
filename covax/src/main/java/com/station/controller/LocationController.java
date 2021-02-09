@@ -118,9 +118,11 @@ public class LocationController {
 			locInfo.setGeoCoordinatesInfo(geoLocations);
 			covaxStations.add(locInfo);
 		}
-			
-		return (userLocationList.size() == 0) ? Response.createErrorResponse("No Covax station found for the city!!"):
-			Response.createSuccessResponse("Covax Station Found!",  userLocationList);
+		
+		covaxStations.forEach((val) -> { System.out.println(val.getGeoCoordinatesInfo().size() + "Id : " + val.getId() + "Allowed : " + val.getAllowed()); } );
+		
+		return (covaxStations.size() == 0) ? Response.createErrorResponse("No Covax station found for the city!!"):
+			Response.createSuccessResponse("Covax Station Found!",  covaxStations);
 	}
 	
 	/*
