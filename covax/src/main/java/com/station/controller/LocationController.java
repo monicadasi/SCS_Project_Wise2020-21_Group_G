@@ -30,7 +30,7 @@ import de.westnordost.osmapi.overpass.OverpassMapDataDao;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/LocationInfo")
+@RequestMapping("/locationInfo")
 public class LocationController {
 
 	@Autowired
@@ -99,6 +99,7 @@ public class LocationController {
 				: Response.createSuccessResponse("Covax Station Found!", covaxStations);
 	}
 
+	// overpass map api query
 	public static List<CityNodes> searchStations() {
 		OsmConnection connection = new OsmConnection("https://overpass-api.de/api/", "my user agent");
 		OverpassMapDataDao overpass = new OverpassMapDataDao(connection);
@@ -108,7 +109,7 @@ public class LocationController {
 				"area[name=\"Frankfurt am Main\"]->.b;node(area.b)[\"amenity\"~\"hospital|clinic|doctors\"]; out meta;",
 				mdh);
 
-		System.out.println("length of osm data : " + mdh.cityNodesListFromOsm.size());
+		System.out.println("Nodes from osm data : " + mdh.cityNodesListFromOsm.size());
 		return mdh.cityNodesListFromOsm;
 	}
 }

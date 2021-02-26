@@ -65,10 +65,4 @@ public class SampleController {
 		return vals.keySet();
 	}
 
-	@RequestMapping("/covaxSearch")
-	public List<CityDivision> getLocationByCityName() {
-		// System.out.println("got req");
-		return cityDivisionrepo.findAll();
-	}
-
 }
