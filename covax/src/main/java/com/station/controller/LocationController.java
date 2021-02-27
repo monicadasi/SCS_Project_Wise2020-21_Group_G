@@ -94,6 +94,24 @@ public class LocationController {
 			locInfo.setAllowed(entry.getValue() < cityNodes.size() ? entry.getValue() : cityNodes.size());
 			covaxStations.add(locInfo);
 		}
+		
+		List<SaveUserLocationData> userLocationList = usrLocationRepos.findByUserId(locSearch.getUserId());
+		
+		List<CityNodes> savedNodes = new ArrayList<CityNodes>();
+		for (SaveUserLocationData savedLoc : userLocationList) {
+			savedNodes.add(savedLoc.getNode());
+		}
+				
+		for (int i = 0; i < covaxStations.size(); i++) {
+			// compare the saved nodes with that of received division nodes
+			// and remove the saved nodes from the division nodes if found.
+			// Recommended city nodes should be distinct and shouldn't contain 
+			// the saved nodes.
+			List<CityNodes> divisionNodes = covaxStations.get(i).getCityInfo();
+			divisionNodes.removeAll(savedNodes);
+			covaxStations.get(i).setCityInfo(divisionNodes);
+		}
+		
 		return (covaxStations.size() == 0) ? Response.createErrorResponse("No Covax station found for the city!!")
 				: Response.createSuccessResponse("Covax Station Found!", covaxStations);
 	}
