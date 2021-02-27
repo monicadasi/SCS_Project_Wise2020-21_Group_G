@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import com.station.bean.CityNodes;
 import com.station.bean.LocationInfo;
 import com.station.repos.CityNodesRepository;
 import com.station.repos.UserLocationRepository;
+import com.station.repos.UserRepository;
 import com.station.services.LocationRecommender;
 import com.station.services.OsmMapHandler;
 import com.station.utility.Response;
@@ -35,6 +37,9 @@ public class LocationController {
 
 	@Autowired
 	private UserLocationRepository usrLocationRepos;
+	
+	@Autowired
+	private UserRepository userRepos;
 
 	@Autowired
 	LocationRecommender locationRecommender;
@@ -71,7 +76,17 @@ public class LocationController {
 	@RequestMapping(method = RequestMethod.POST, value = "/getLocationByCity")
 	public Response getLocationByCityName(@RequestBody LocationSearch locSearch) {
 		System.out.println(locSearch);
-
+  
+		Optional<User> usr = userRepos.findById(locSearch.getUserId());
+		if(usr.isPresent()) {
+			User user = usr.get();
+			if(user.getSearchedLocationsCount() == null || user.getSearchedLocationsCount() != locSearch.getNumOfStations())
+			{
+				user.setSearchedLocationsCount(locSearch.getNumOfStations());
+				userRepos.save(user);
+			}	
+		}
+		
 		cityDivisons = locationRecommender.findRecommendations(null, locSearch.getNumOfStations());
 		List<LocationInfo> covaxStations = new ArrayList<LocationInfo>();
 

@@ -26,6 +26,9 @@ public class User {
 	String mobile;
 	@Convert(converter = AttributeEncryptor.class)
 	String password;
+	@Column
+	Integer searchedLocationsCount;
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,5 +77,11 @@ public class User {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public Integer getSearchedLocationsCount() {
+		return searchedLocationsCount;
+	}
+	public void setSearchedLocationsCount(int searchedLocationsCount) {
+		this.searchedLocationsCount = searchedLocationsCount;
 	}
 }
