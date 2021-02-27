@@ -42,31 +42,30 @@ public class LocationController {
 	@Autowired
 	private CityNodesRepository cityNodeRepo;
 
-	List<SaveUserLocationData> userLocationList = null;
 	List<User> userList = null;
 	Map<CityDivision, Integer> cityDivisons = new HashMap<CityDivision, Integer>();
 
 	@RequestMapping(method = RequestMethod.POST, value = "/saveLocation")
-	public Response saveUserLocation(@RequestBody List<SaveUserLocationData> userLocation) {
+	public Response saveUserLocation(@RequestBody SaveUserLocationData userLocation) {
 		System.out.println(userLocation);
 
-		if (!userLocation.isEmpty() && userLocation.size() >= 1 && userLocation.get(0).getUserId() != null) {
-			userLocationList = usrLocationRepos.findByUserId(userLocation.get(0).getUserId());
+		if (userLocation!= null) {
+			userLocation=usrLocationRepos.save(userLocation);
 		}
 
-		return (userLocationList != null && userLocationList.isEmpty() && userLocationList.size() == 0)
+		return (userLocation != null)
 				? Response.createSuccessResponse("Location Saved Successfully!!",
-						usrLocationRepos.saveAll(userLocation))
+						null)
 				: Response.createErrorResponse("Unable to save the location!");
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/getLocation")
 	public Response getUserLocation(@RequestBody User user) {
 
-		userLocationList = usrLocationRepos.findByUserId(user.getId());
+		List<SaveUserLocationData> userLocationList = usrLocationRepos.findByUserId(user.getId());
 		System.out.println(userLocationList);
-		return (userLocationList.size() == 0) ? Response.createErrorResponse("User Not Found!")
-				: Response.createSuccessResponse("User Found", usrLocationRepos.findByUserId(user.getId()));
+		return (userLocationList.size() == 0) ? Response.createErrorResponse("No saved locations")
+				: Response.createSuccessResponse("Saved locations found", userLocationList);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/getLocationByCity")
