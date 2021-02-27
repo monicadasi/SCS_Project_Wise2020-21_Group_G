@@ -9,4 +9,6 @@ import com.station.bean.SaveUserLocationData;
 public interface UserLocationRepository extends JpaRepository<SaveUserLocationData, Long>{
 	
 	public List<SaveUserLocationData> findByUserId(Long userId);
+
+	Long deleteByUserId(Long id);
 }

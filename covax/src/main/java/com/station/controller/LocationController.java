@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -97,7 +98,14 @@ public class LocationController {
 		return (covaxStations.size() == 0) ? Response.createErrorResponse("No Covax station found for the city!!")
 				: Response.createSuccessResponse("Covax Station Found!", covaxStations);
 	}
-
+	@Transactional
+	@RequestMapping(method = RequestMethod.POST, value = "/clearSavedLocations")
+	public Response removeSavedLocations(@RequestBody User user) {
+		Long deletedNumber=usrLocationRepos.deleteByUserId(user.getId());
+		return (deletedNumber == 0) ? Response.createErrorResponse("Nothing to delete")
+				: Response.createSuccessResponse("Deleted the saved locations", null);
+	}
+	
 	// overpass map api query
 	public static List<CityNodes> searchStations() {
 		OsmConnection connection = new OsmConnection("https://overpass-api.de/api/", "my user agent");
