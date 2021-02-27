@@ -13,6 +13,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {DataService} from '../dataservice.service';
+import NewsAPI from 'newsapi';
 
 @Component({
   selector: 'app-Home',
@@ -31,6 +32,7 @@ export class HomeComponent implements OnInit {
   mapLng = 9.2325;
   mapDefaultZoom = 18;
 
+  mArticles:Array<any>;
   Data;
   featurePoint;
   modal;
@@ -41,8 +43,9 @@ export class HomeComponent implements OnInit {
   constructor(private apservice:AppService,public dialog: MatDialog,private fb: FormBuilder, 
     private route: ActivatedRoute,private router: Router, 
     private http: HttpClient, private dataService: DataService ) { }
-  baseURL: string = "http://localhost:8080/userLocation/";
+  baseURL: string = "http://localhost:8080/LocationInfo/";
     UserName = "";
+  newsapi = new NewsAPI('31f1f66df33b44239d734be337e90630');
   //   featurePoint1 = new ol.Feature({
   //     geometry: new ol.geom.Point([-12590727, 2281352])
   // });
@@ -55,6 +58,24 @@ export class HomeComponent implements OnInit {
         this.modal.style.display = "none";
       }
     }
+
+    if (window.history && window.history.pushState) {
+
+      $(window).on('popstate', function() {
+        this.router.navigate(['/login']);
+       
+      });
+    }
+    
+    this.newsapi.v2.topHeadlines({
+      q: 'corona',
+      sortBy: 'relevancy',
+      country: 'de'
+    }).then(response => {
+      console.log(response.articles);
+      this.mArticles=response.articles;
+    });
+
     this.UserName = this.apservice.getUserName();
     // this.Data = this.apservice.getSavedLocationDetails();
     var user = {
@@ -65,6 +86,7 @@ export class HomeComponent implements OnInit {
     this.GetLocationPoints(user).subscribe(
       res => {
         console.log(res);
+        if(res.status == 'success' && res.message == 'User Found') {
         this.Data = res.data;
         this.Data.forEach(element => {
           this.featurePoint = new ol.Feature({
@@ -75,6 +97,7 @@ export class HomeComponent implements OnInit {
           sourceFeatures.addFeatures([this.featurePoint]);
         });
       }
+    }
 );
 
     var DataCopy = this;
@@ -172,6 +195,10 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  // showMap() {
+  //   this.setupVaccine.showMap();
+  // }
+
   geometryStyle(feature){
     var
         style = [],
@@ -198,6 +225,10 @@ closedailog(){
 GetLocationPoints(user: { id: any}): Observable<any> {
   const headers = { 'content-type': 'application/json'};
   return this.http.post(this.baseURL + 'getLocation', user,{'headers':headers})
+}
+
+logout() {
+  this.router.navigate(['/login']);
 }
 
 popup(id){

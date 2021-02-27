@@ -171,3 +171,92 @@ a {
   text-decoration: none;
   cursor: pointer;
 }
+
+.mat-toolbar{
+  height: 7vh;
+  }
+  
+  div {
+    overflow: inherit;
+  }
+  
+  .mat-sidenav-container{
+  background-color: lightskyblue;
+  min-height: 93vh !important;
+  }
+  
+  a{
+    text-decoration: none;
+    font-size: 110%;
+    white-space: normal;
+  }
+  
+  button{
+    font-size: 110%;
+    min-width: min-content;
+  }
+  
+  .example-icon {
+    padding: 0 14px;
+  }
+  
+  // .example-spacer {
+  //   flex: 1 1 auto;
+  // }
+  
+  .mat-sidenav-content{
+      font-size: 200%;
+      text-align: center;
+  }
+
+  // .example-spacer {
+  //   flex: 1 1 auto;
+  // }
+  
+  .example-card{
+      margin-top: 4px;
+  }
+  
+  .example-header-image { 
+    background-size: cover;
+  }
+  
+  .title{
+      font-weight: bold;
+  }
+  
+  .img-article{
+      height: 350px;
+  }
+  
+  .action-buttons{
+      text-align: center;
+  }
+  
+  .example-container {
+      width: 100%;
+      height: auto;
+      border: 1px solid rgba(111, 111, 111, 0.50);
+  }
+  
+  .example-sidenav-content {
+      display: flex;
+      height: 75%;
+      align-items: center;
+      justify-content: center;
+  }
+  
+  .example-sidenav {
+      padding: 20px;
+  }
+  
+  .source-name {
+      margin-left:5px; 
+  }
+  
+  .list-item:hover{
+      cursor: pointer;
+      background-color: #3f51b5;
+      color: white;
+  }
+  

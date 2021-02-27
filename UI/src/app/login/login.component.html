@@ -1,9 +1,12 @@
 <div >
-<div class="login-dark" style="height: 695px;">
+<div class="login-dark" style="height: 1000px;">
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <h2 class="sr-only">Login Form</h2>
       <div class="illustration"><i class="icon ion-ios-locked-outline"></i></div>
       <div class="title">Covax</div>
+      <!-- <div id="sect1"class="container">        -->
+        <!-- <h2>Now Load image on the displa\</h2>   -->
+      <!-- </div>   -->
       <div class="form-group">
         <span>
           <input required class="form-control" type="email" name="email" placeholder="Email" formControlName="username" [ngClass]="{ 'is-invalid': submitted && f.username.errors }">

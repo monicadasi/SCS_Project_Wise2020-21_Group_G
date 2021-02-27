@@ -1,20 +1,20 @@
-.login-dark {
-    height: 1000px;
-    background-size: cover;
-    position: relative;
-  }
+// .login-dark {
+//     height: 1000px;
+//     background-size: cover;
+//     position: relative;
+//   }
   
   .login-dark form {
     max-width: 320px;
     width: 90%;
-    background-color: #1e2833;
+    background-color: #f8f9fa;
     padding: 40px;
     border-radius: 4px;
     transform: translate(-50%, -50%);
     position: absolute;
     top: 50%;
     left: 50%;
-    color: #fff;
+    color: rgb(3, 3, 3);
     box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
   }
   
@@ -28,6 +28,7 @@
     text-align: center;
     font-size: 45px;
     color: #2980ef;
+    font-family: serif;
   }
 
   .login-dark form .form-control {
@@ -74,4 +75,11 @@
     transform: translateY(1px);
   }
   
+  .login-dark {  
+    height: 1000 px;  
+    color: #fff;
+    background-image: url("../../assets/corona.jpg");  
+    // background-size: 100%;  
+    background-size: cover;  
+}   
   

@@ -15,6 +15,10 @@ import { PasswordComponent } from './password/password.component';
 import { SetupVaccineStationComponent } from './setup-vaccine-station/setup-vaccine-station.component';
 import { DailogComponent } from './dailog/dailog.component';
 import { OtpComponent } from './otp/otp.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import {
+  MatIconModule, MatButtonModule, MatSidenavModule, MatToolbarModule
+} from '@angular/material';
 @NgModule({
   declarations: [					
     AppComponent,
@@ -34,7 +38,12 @@ import { OtpComponent } from './otp/otp.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
-    ReactiveFormsModule 
+    ReactiveFormsModule,
+    FlexLayoutModule,
+    MatIconModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatToolbarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

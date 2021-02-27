@@ -120,7 +120,7 @@ export class SignupComponent implements OnInit {
     return this.registrationForm.get('email').value.hasError('email') ? 'Not a valid email' : '';
   }
 
-  addPerson(user:{email: string}): Observable<any> {
+  sendOTP(user:{email: string}): Observable<any> {
     const headers = { 'content-type': 'application/json'};
     console.log(this.registrationForm.get('firstName').value);
     return this.http.post(this.baseURL + 'sendtoken', user,{'headers':headers})
@@ -162,7 +162,7 @@ export class SignupComponent implements OnInit {
      this.emailStore = this.registrationForm.get('email').value,
      this.mobile = this.registrationForm.get('phNumber').value,
      this.passwordStore = this.registrationForm.get('confPassword').value
-     this.addPerson({email: this.registrationForm.get('email').value}).subscribe(
+     this.sendOTP({email: this.registrationForm.get('email').value}).subscribe(
       res => {
         if(res.status == 'success') {
          this.successAlertNotification();

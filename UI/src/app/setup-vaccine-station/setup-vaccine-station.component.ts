@@ -32,74 +32,103 @@ export class SetupVaccineStationComponent implements OnInit {
   mapDefaultZoom = 18;
 
   Data;
+  DataCopy;
   featurePoint;
   plotingPoints:any  = [];
   sourceFeatures;
   selected;
   schladming = [8.6821, 50.1109]; // longitude, latitude follow the order 
   schladmingWebMercator = fromLonLat(this.schladming);
-  baseURL: string = "http://localhost:8080/userLocation/";
+  baseURL: string = "http://localhost:8080/LocationInfo/";
   modal;
   address;
   constructor(private apservice:AppService,public dialog: MatDialog,private fb: FormBuilder, 
     private route: ActivatedRoute,private router: Router, 
     private http: HttpClient, private dataService: DataService) { }
 
- 
-
    
   ngOnInit() {
+    this.Data = this.apservice.getSavedLocationDetails();
+    this.UserName = this.apservice.getUserName();
+    this.DataCopy = this;
+   
+     this.sourceFeatures = new ol.source.Vector()
+     setTimeout(() => {
+      this.showMap();
+     }, 0)
+    
     this.modal = document.getElementById("myModal");
+    console.log('test');
     window.onclick = function(event) {
       if (event.target == this.modal) {
         this.modal.style.display = "none";
       }
     }
-    this.Data = this.apservice.getSavedLocationDetails();
-    this.UserName = this.apservice.getUserName();
-    var DataCopy = this;
-   
-     this.sourceFeatures = new ol.source.Vector()
+
+    if (window.history && window.history.pushState) {
+
+      $(window).on('popstate', function() {
+        this.router.navigate(['/login']);
+       
+      });
+    }
+  }
+
+  showMap() {
     var layerFeatures = new ol.layer.Vector({
-        source: this.sourceFeatures,
-        style: new ol.style.Style({
-          image: new ol.style.Icon({
-            anchor: [0.5, 0.5],
-            anchorXUnits: "fraction",
-            anchorYUnits: "fraction",
-            src: "assets/marker.png"
-          })
+      source: this.sourceFeatures,
+      style: new ol.style.Style({
+        image: new ol.style.Icon({
+          anchor: [0.5, 0.5],
+          anchorXUnits: "fraction",
+          anchorYUnits: "fraction",
+          src: "assets/marker.png"
         })
-    })
-    var sourceFeatures2 = new ol.source.Vector()
-    var layerFeatures2 = new ol.layer.Vector({
-        source: sourceFeatures2
-    });
-
-    // this.featurePoint.setId('point 1');
-    // this.featurePoint1.setId('point 2');
-    // sourceFeatures.addFeatures([this.featurePoint]);
-    // sourceFeatures.addFeatures([this.featurePoint1]);
-    
-
-
-    this.map = new ol.Map({
-      target: document.getElementById('map'),
-      controls: [],
-      layers: [
-          new ol.layer.Tile({
-              source: new ol.source.OSM()
-          }),
-          layerFeatures, layerFeatures2
-      ],
-      view: new ol.View({
-          center : this.schladmingWebMercator,
-          zoom : 12
       })
-    });
+  })
+  var sourceFeatures2 = new ol.source.Vector()
+  var layerFeatures2 = new ol.layer.Vector({
+      source: sourceFeatures2
+  });
 
-    var hoverInteraction = new ol.interaction.Select({
-      condition: ol.events.condition.pointerMove,
+  // this.featurePoint.setId('point 1');
+  // this.featurePoint1.setId('point 2');
+  // sourceFeatures.addFeatures([this.featurePoint]);
+  // sourceFeatures.addFeatures([this.featurePoint1]);
+  
+
+
+  this.map = new ol.Map({
+    target: document.getElementById('map'),
+    controls: [],
+    layers: [
+        new ol.layer.Tile({
+            source: new ol.source.OSM()
+        }),
+        layerFeatures, layerFeatures2
+    ],
+    view: new ol.View({
+        center : this.schladmingWebMercator,
+        zoom : 12
+    })
+  });
+
+  var hoverInteraction = new ol.interaction.Select({
+    condition: ol.events.condition.pointerMove,
+    layers: [layerFeatures, layerFeatures2],
+    style: new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [0.5, 0.5],
+        anchorXUnits: "fraction",
+        anchorYUnits: "fraction",
+        src: "assets/icon.png"
+      })
+    })
+  });
+
+  this.map.addInteraction(hoverInteraction);
+    var clickinter = new ol.interaction.Select({
+      condition: ol.events.condition.click,
       layers: [layerFeatures, layerFeatures2],
       style: new ol.style.Style({
         image: new ol.style.Icon({
@@ -109,46 +138,32 @@ export class SetupVaccineStationComponent implements OnInit {
           src: "assets/icon.png"
         })
       })
-    });
-
-    this.map.addInteraction(hoverInteraction);
-      var clickinter = new ol.interaction.Select({
-        condition: ol.events.condition.click,
-        layers: [layerFeatures, layerFeatures2],
-        style: new ol.style.Style({
-          image: new ol.style.Icon({
-            anchor: [0.5, 0.5],
-            anchorXUnits: "fraction",
-            anchorYUnits: "fraction",
-            src: "assets/icon.png"
-          })
-        })
-    });
-    this.map.addInteraction(clickinter);
-        clickinter.on('select', function(evt){
-            if(evt.selected.length > 0){
-              // this.popup(evt.selected[0].getId());
-              // alert(evt.selected[0].getId() + " is clicked");
-              DataCopy.Data.forEach(element => {
-                if(element.id == evt.selected[0].getId()){
-                  console.log(element);
-                  // DataCopy.dialog.open(DailogComponent);
-                  // this.opendailog();
-                  DataCopy.address = element.address;
-                  DataCopy.modal.style.display = "block";
-                  // const dialogRef = DataCopy.dialog.open(DailogComponent, {
-                  //   width: '250px',
-                  //   data: {name: "this.name", animal: "this.animal"}
-                  // });
-                }
-              });
-            }
-        });
-      this.map.on('pointermove', function(e) {
-        var pixel = this.getEventPixel(e.originalEvent);
-        var hit = this.hasFeatureAtPixel(pixel);
-        this.getTarget().style.cursor = hit ? 'pointer' : '';
-    });
+  });
+  this.map.addInteraction(clickinter);
+      clickinter.on('select', function(evt){
+          if(evt.selected.length > 0){
+            // this.popup(evt.selected[0].getId());
+            // alert(evt.selected[0].getId() + " is clicked");
+            this.DataCopy.Data.forEach(element => {
+              if(element.id == evt.selected[0].getId()){
+                console.log(element);
+                // DataCopy.dialog.open(DailogComponent);
+                // this.opendailog();
+                this.DataCopy.address = element.address;
+                this.DataCopy.modal.style.display = "block";
+                // const dialogRef = DataCopy.dialog.open(DailogComponent, {
+                //   width: '250px',
+                //   data: {name: "this.name", animal: "this.animal"}
+                // });
+              }
+            });
+          }
+      });
+    this.map.on('pointermove', function(e) {
+      var pixel = this.getEventPixel(e.originalEvent);
+      var hit = this.hasFeatureAtPixel(pixel);
+      this.getTarget().style.cursor = hit ? 'pointer' : '';
+  });
   }
 
   opendailog(){
@@ -177,6 +192,7 @@ export class SetupVaccineStationComponent implements OnInit {
     this.GetVStations(LocationSearch).subscribe(
       res => {
         console.log(res);
+        if(res.status == 'success' && res.message == 'User Found') {
         this.Data.forEach(element => {
           this.featurePoint = new ol.Feature({
             geometry: new ol.geom.Point(fromLonLat([element.longitude,element.latitude]))
@@ -186,13 +202,17 @@ export class SetupVaccineStationComponent implements OnInit {
           this.sourceFeatures.addFeatures([this.featurePoint]);
         });
       }
+    }
   );
   }
   GetVStations(LocationSearch: { cityName: any}): Observable<any> {
     const headers = { 'content-type': 'application/json'};
-    return this.http.post(this.baseURL + 'getLocation', LocationSearch,{'headers':headers})
+    return this.http.post(this.baseURL + 'getLocationByCity', LocationSearch,{'headers':headers})
   }
  
+  logout() {
+    this.router.navigate(['/login']);
+  }
 
 }
 

@@ -2,15 +2,18 @@
 
 <!-- <app-ol></app-ol> -->
 <mat-toolbar class="mat-elevation-z5 mattoolbar" color="primary">
-  <a routerLink="/home"  class="logo">Cova <span class="logo-span">X</span></a>
-  <a  routerLink="/home" routerLinkActive="active"  class="nav-tab boxes smooth-inset-box-shadow" style="margin-left: 2rem;">Home</a>
-  <a  routerLink="/setup_vaccine_station" routerLinkActive="active" class="nav-tab boxes smooth-inset-box-shadow">Setup vaccine station</a>
+  <span class="example-spacer"></span>
+  <div fxShow="true" fxHide.lt-md="true">
+  <a mat-button routerLink="/home"  class="logo">Cova <span class="logo-span">X</span></a>
+  <a mat-button routerLink="/home" >Home</a>
+  <a mat-button routerLink="/setup_vaccine_station" >Setup vaccine station</a>
+  </div>
     <span class="spacer"></span>
     <div class="loginSection">
     <span class="username">
       {{UserName}}
     </span>
-        <button mat-button>
+        <button mat-button (click)= "logout()">
       <mat-icon>logout</mat-icon>
     </button>
     </div>
@@ -22,15 +25,15 @@
     <mat-form-field appearance="fill" style="    margin-left: 0.5rem;margin-right: 2rem;">
       <mat-label>City</mat-label>
       <mat-select [(value)]="selected" required>
-        <mat-option value="one">Frankfurt am main</mat-option>
-        <mat-option value="two">Berlin</mat-option>
+        <mat-option value="Frankfurt am main">Frankfurt am main</mat-option>
+        <mat-option value="Berlin">Berlin</mat-option>
       </mat-select>
     </mat-form-field>
     <button mat-raised-button color="primary" (click)="GetLocationToSetUpVStation()" >Search</button>
   </mat-card>
   </div>
   <div >
-  <mat-card  >
+  <mat-card>
   <div id="map" class="map"><div id="popup"></div></div>
   <div id="mouse-position"></div>
 </mat-card>

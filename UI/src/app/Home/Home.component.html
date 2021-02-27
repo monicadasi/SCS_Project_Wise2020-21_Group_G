@@ -1,24 +1,44 @@
 <!-- <app-ol></app-ol> -->
 <mat-toolbar class="mat-elevation-z5 mattoolbar" color="primary">
-  <a (click)="navigate('/home')"   class="logo">Cova <span class="logo-span">X</span></a>
-  <a  (click)="navigate('/home')" routerLinkActive="active"  class="nav-tab boxes smooth-inset-box-shadow" style="margin-left: 2rem;">Home</a>
-  <a  (click)="navigate('/setup_vaccine_station')"  routerLinkActive="active" class="nav-tab boxes smooth-inset-box-shadow">Setup vaccine station</a>
+  <span class="example-spacer"></span>
+  <div fxShow="true" fxHide.lt-md="true">
+  <a mat-button routerLink="/home"   class="logo">Cova <span class="logo-span">X</span></a>
+  <a mat-button routerLink="/home" >Home</a>
+  <a mat-button routerLink="/setup_vaccine_station"  >Setup vaccine station</a>
+</div>
     <span class="spacer"></span>
     <div class="loginSection">
     <span class="username">
       {{UserName}}
     </span>
-        <button mat-button>
+        <button mat-button (click)= "logout()">
       <mat-icon>logout</mat-icon>
     </button>
     </div>
 </mat-toolbar>
 
-<main>
-  <div id="map" class="map"><div id="popup"></div></div>
-<div id="mouse-position"></div>
 
+<main>
+<mat-card class="example-card"  *ngFor="let article of mArticles">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title class="title">{{article.title}}</mat-card-title>
+    <mat-card-subtitle>{{article.source.name}}</mat-card-subtitle>
+  </mat-card-header>
+  <img mat-card-image class="img-article" src={{article.urlToImage}} alt="">
+  <mat-card-content>
+    <p>
+      {{article.description}}
+    </p>
+  </mat-card-content>
+</mat-card> 
 </main>
+
+<!-- <mat-tab label="Landkarte">
+  <ng-template matTabContent>
+  <app-mapdata id="map"></app-mapdata>
+  </ng-template>
+</mat-tab> -->
 
 <mat-toolbar color="primary" class="mat-elevation-z5  mattoolbar1">
   <span style="margin-left: 39rem;"><mat-icon>copyright</mat-icon> All rights reserved</span>	

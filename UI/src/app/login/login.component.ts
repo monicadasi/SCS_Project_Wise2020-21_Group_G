@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
   }
 
   errorAlertNotification(){
-    Swal.fire('User', 'does not exists', 'error');
+    Swal.fire('Invalid', 'credentials', 'error');
 }
 
   get f() { return this.loginForm.controls; }
@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
         this.errorAlertNotification();
        }
       }
-);
+    );
     }
     
 }
