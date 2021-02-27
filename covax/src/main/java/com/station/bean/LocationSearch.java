@@ -25,4 +25,12 @@ public class LocationSearch {
 	public void setCityName(String cityName) {
 		this.cityName = cityName;
 	}
+
+	public Integer getNumOfStations() {
+		return numOfStations;
+	}
+
+	public void setNumOfStations(Integer numOfStations) {
+		this.numOfStations = numOfStations;
+	}
 }
