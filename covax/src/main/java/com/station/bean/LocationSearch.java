@@ -12,12 +12,6 @@ public class LocationSearch {
 		this.userId = userId;
 	}
 	
-	public Integer getNumOfStations() {
-		return numOfStations;
-	}
-	public void setNumOfStations(Integer numOfStations) {
-		this.numOfStations = numOfStations;
-	}
 
 	public String getCityName() {
 		return cityName;
