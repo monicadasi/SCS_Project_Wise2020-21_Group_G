@@ -12,7 +12,6 @@ public class LocationSearch {
 		this.userId = userId;
 	}
 	
-
 	public String getCityName() {
 		return cityName;
 	}
