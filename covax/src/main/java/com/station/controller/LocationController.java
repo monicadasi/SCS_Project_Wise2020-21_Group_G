@@ -1,6 +1,9 @@
 package com.station.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +41,7 @@ public class LocationController {
 
 	@Autowired
 	private UserLocationRepository usrLocationRepos;
-	
+
 	@Autowired
 	private UserRepository userRepos;
 
@@ -55,13 +58,11 @@ public class LocationController {
 	public Response saveUserLocation(@RequestBody SaveUserLocationData userLocation) {
 		System.out.println(userLocation);
 
-		if (userLocation!= null) {
-			userLocation=usrLocationRepos.save(userLocation);
+		if (userLocation != null) {
+			userLocation = usrLocationRepos.save(userLocation);
 		}
 
-		return (userLocation != null)
-				? Response.createSuccessResponse("Location Saved Successfully!!",
-						null)
+		return (userLocation != null) ? Response.createSuccessResponse("Location Saved Successfully!!", null)
 				: Response.createErrorResponse("Unable to save the location!");
 	}
 
@@ -77,17 +78,17 @@ public class LocationController {
 	@RequestMapping(method = RequestMethod.POST, value = "/getLocationByCity")
 	public Response getLocationByCityName(@RequestBody LocationSearch locSearch) {
 		System.out.println(locSearch);
-  
+
 		Optional<User> usr = userRepos.findById(locSearch.getUserId());
-		if(usr.isPresent()) {
+		if (usr.isPresent()) {
 			User user = usr.get();
-			if(user.getSearchedLocationsCount() == null || user.getSearchedLocationsCount() != locSearch.getNumOfStations())
-			{
+			if (user.getSearchedLocationsCount() == null
+					|| user.getSearchedLocationsCount() != locSearch.getNumOfStations()) {
 				user.setSearchedLocationsCount(locSearch.getNumOfStations());
 				userRepos.save(user);
-			}	
+			}
 		}
-		
+
 		cityDivisons = locationRecommender.findRecommendations(null, locSearch.getNumOfStations());
 		List<LocationInfo> covaxStations = new ArrayList<LocationInfo>();
 
@@ -110,35 +111,44 @@ public class LocationController {
 			locInfo.setAllowed(entry.getValue() < cityNodes.size() ? entry.getValue() : cityNodes.size());
 			covaxStations.add(locInfo);
 		}
-		
+
 		List<SaveUserLocationData> userLocationList = usrLocationRepos.findByUserId(locSearch.getUserId());
-		
+
 		List<CityNodes> savedNodes = new ArrayList<CityNodes>();
 		for (SaveUserLocationData savedLoc : userLocationList) {
 			savedNodes.add(savedLoc.getNode());
 		}
-				
+
 		for (int i = 0; i < covaxStations.size(); i++) {
 			// compare the saved nodes with that of received division nodes
 			// and remove the saved nodes from the division nodes if found.
-			// Recommended city nodes should be distinct and shouldn't contain 
+			// Recommended city nodes should be distinct and shouldn't contain
 			// the saved nodes.
 			List<CityNodes> divisionNodes = covaxStations.get(i).getCityInfo();
-			divisionNodes.removeAll(savedNodes);
+			boolean isDeleted = divisionNodes.removeAll(savedNodes);
+			int allowed = covaxStations.get(i).getAllowed();
+			if (isDeleted) {
+				allowed -= 1;
+				covaxStations.get(i).setAllowed(allowed);
+			}
 			covaxStations.get(i).setCityInfo(divisionNodes);
+			if (allowed == 0 && divisionNodes.size() > allowed) {
+				covaxStations.remove(i);
+			}
 		}
-		
+
 		return (covaxStations.size() == 0) ? Response.createErrorResponse("No Covax station found for the city!!")
 				: Response.createSuccessResponse("Covax Station Found!", covaxStations);
 	}
+
 	@Transactional
 	@RequestMapping(method = RequestMethod.POST, value = "/clearSavedLocations")
 	public Response removeSavedLocations(@RequestBody User user) {
-		Long deletedNumber=usrLocationRepos.deleteByUserId(user.getId());
+		Long deletedNumber = usrLocationRepos.deleteByUserId(user.getId());
 		return (deletedNumber == 0) ? Response.createErrorResponse("Nothing to delete")
 				: Response.createSuccessResponse("Deleted the saved locations", null);
 	}
-	
+
 	// overpass map api query
 	public static List<CityNodes> searchStations() {
 		OsmConnection connection = new OsmConnection("https://overpass-api.de/api/", "my user agent");
