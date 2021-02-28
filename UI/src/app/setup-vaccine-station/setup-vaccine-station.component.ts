@@ -13,6 +13,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {DataService} from '../dataservice.service';
 import { NgxSpinnerService } from "ngx-spinner";
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-setup-vaccine-station',
   templateUrl: './setup-vaccine-station.component.html',
@@ -30,7 +31,7 @@ export class SetupVaccineStationComponent implements OnInit {
   mapLat = 48.7776;
   mapLng = 9.2325;
   mapDefaultZoom = 18;
-
+  showErrorMessage;
   Data;
   DataCopy;
   featurePoint;
@@ -295,8 +296,42 @@ export class SetupVaccineStationComponent implements OnInit {
   }
  
   ResetStationDetails(){
-    this.restser().subscribe(res => {
-      console.log(res);
+    this.restser().subscribe(result => {
+      var res:any = result;
+      console.log(result);
+      if(res.status == 'success') {
+        Swal.fire({
+          title: 'User',
+          text: 'Saved Details are Reset!',
+          icon: 'success',
+          showCancelButton: false,
+          confirmButtonText: 'OK'
+        }).then((result) => {
+          this.selected = "";
+          this.numberselected = "";
+          this.sourceFeatList.forEach(elem =>{
+            elem.clear();
+          });
+        });
+        } 
+        else if(res.status == 'failure'){
+          Swal.fire({
+            title: 'User',
+            text: 'Saved Details are Reset!',
+            icon: 'success',
+            showCancelButton: false,
+            confirmButtonText: 'OK'
+          }).then((result) => {
+            this.selected = "";
+            this.numberselected = "";
+            this.sourceFeatList.forEach(elem =>{
+              elem.clear();
+            });
+          });
+        }
+      else {
+        this.errorAlertNotification();
+       }
     })
   }
   restser(){
@@ -307,6 +342,10 @@ export class SetupVaccineStationComponent implements OnInit {
     return this.http.post(this.baseURL + 'clearSavedLocations', user,{'headers':headers})
   }
   GetLocationToSetUpVStation(){
+    if(this.selected != "" && this.selected != undefined){
+      if (this.numberselected == "" || this.numberselected == undefined){
+        this.numberselected = 1;
+      }
     var LocationSearch = {
       userId:5,
       cityName: this.selected,
@@ -341,6 +380,16 @@ export class SetupVaccineStationComponent implements OnInit {
         i = i+1;
       });
       } );
+    }else{
+      // Swal.fire('Invalid', 'credentials', 'error');
+      Swal.fire({
+        title: 'Search Stations',
+        text: 'Please select the location',
+        icon: 'error',
+        showCancelButton: false,
+        confirmButtonText: 'OK'
+      })
+    }
   }
   
   GetVStations(LocationSearch: { cityName: any; numOfStations:any; userId:any,}): Observable<any> {
@@ -354,10 +403,32 @@ export class SetupVaccineStationComponent implements OnInit {
   }
 
   SaveStationData(){
-    this.SaveStation().subscribe(res => {
-      console.log(res);
+    this.SaveStation().subscribe(result => {
+      console.log(result);
+      var res:any = result;
+      if(res.status == 'success') {
+        this.closedailog();
+        Swal.fire({
+          title: 'Station Details',
+          text: 'Saved Successfully!!',
+          icon: 'success',
+          showCancelButton: false,
+          confirmButtonText: 'OK'
+        }).then((result) => {
+          this.GetLocationToSetUpVStation();
+        });
+        } 
+        else if(res.status == 'failure'){
+          this.showErrorMessage = true;
+        }
+      else {
+        this.errorAlertNotification();
+       }
     })
   }
+  errorAlertNotification(){
+    Swal.fire('Invalid', 'credentials', 'error');
+}
   SaveStation(){
    var userLocation =  {
       "userId":1,
