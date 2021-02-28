@@ -19,6 +19,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatIconModule, MatButtonModule, MatSidenavModule, MatToolbarModule
 } from '@angular/material';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 @NgModule({
   declarations: [					
     AppComponent,
@@ -33,6 +35,7 @@ import {
    entryComponents: [DailogComponent],
   imports: [
     BrowserModule,
+    NgxSpinnerModule,
     HttpClientModule,
     DemoMaterialModule,
     AppRoutingModule,
@@ -45,6 +48,7 @@ import {
     MatSidenavModule,
     MatToolbarModule
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],
   bootstrap: [AppComponent]
 })

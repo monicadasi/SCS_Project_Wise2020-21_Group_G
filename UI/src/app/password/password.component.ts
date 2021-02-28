@@ -8,6 +8,7 @@ import {DataService} from '../dataservice.service';
 import {MustMatch} from '../passwordMatch';
 import Swal from 'sweetalert2';
 import * as $ from 'jquery';
+import { NgxSpinnerService } from "ngx-spinner";
 @Component({
   selector: 'app-password',
   templateUrl: './password.component.html',
@@ -37,7 +38,7 @@ export class PasswordComponent implements OnInit {
   });
   hide = true;
   baseURL: string = "http://localhost:8080/";
-  constructor(private fb: FormBuilder, private route: ActivatedRoute,private router: Router,private http: HttpClient, private dataService: DataService) {}
+  constructor(private fb: FormBuilder,private spinner: NgxSpinnerService, private route: ActivatedRoute,private router: Router,private http: HttpClient, private dataService: DataService) {}
   passwordChange;
   submitted = false;
   ngOnInit() {
@@ -118,8 +119,10 @@ get f() { return this.passwordChange.controls; }
     var user = {
       email: this.passwordChange.get('email').value
     }
+    this.spinner.show();
     this.addPerson(user).subscribe(
       res => {
+        this.spinner.hide();
         if(res.status == 'success') {
          this.successAlertNotification();
         }

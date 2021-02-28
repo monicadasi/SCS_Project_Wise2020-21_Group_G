@@ -13,8 +13,12 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {DataService} from '../dataservice.service';
+//Updated upstream
 import NewsAPI from 'newsapi';
 
+
+import { NgxSpinnerService } from "ngx-spinner";
+// Stashed changes
 @Component({
   selector: 'app-Home',
   templateUrl: './Home.component.html',
@@ -40,17 +44,24 @@ export class HomeComponent implements OnInit {
   plotingPoints:any  = [];
   schladming = [8.6821, 50.1109]; // longitude, latitude follow the order 
   schladmingWebMercator = fromLonLat(this.schladming);
-  constructor(private apservice:AppService,public dialog: MatDialog,private fb: FormBuilder, 
+  constructor(private apservice:AppService,private spinner: NgxSpinnerService,public dialog: MatDialog,private fb: FormBuilder, 
     private route: ActivatedRoute,private router: Router, 
     private http: HttpClient, private dataService: DataService ) { }
-  baseURL: string = "http://localhost:8080/LocationInfo/";
+
+  baseURL: string = "http://localhost:8080/locationInfo/";
+//>>>>>>> Stashed changes
     UserName = "";
   newsapi = new NewsAPI('31f1f66df33b44239d734be337e90630');
   //   featurePoint1 = new ol.Feature({
   //     geometry: new ol.geom.Point([-12590727, 2281352])
   // });
 
-   
+  housenumber = "";
+  names = "";
+  street= "";
+  postcode = "";
+  phone = "";
+  id = "";
   ngOnInit() {
     this.modal = document.getElementById("myModal");
     window.onclick = function(event) {
@@ -81,25 +92,6 @@ export class HomeComponent implements OnInit {
     var user = {
       id: 1
     }
-
-
-    this.GetLocationPoints(user).subscribe(
-      res => {
-        console.log(res);
-        if(res.status == 'success' && res.message == 'User Found') {
-        this.Data = res.data;
-        this.Data.forEach(element => {
-          this.featurePoint = new ol.Feature({
-            geometry: new ol.geom.Point(fromLonLat([element.longitude,element.latitude]))
-            });
-          this.featurePoint.setId(element.id);
-          this.plotingPoints.push(this.featurePoint);
-          sourceFeatures.addFeatures([this.featurePoint]);
-        });
-      }
-    }
-);
-
     var DataCopy = this;
    
     var sourceFeatures = new ol.source.Vector()
@@ -114,10 +106,27 @@ export class HomeComponent implements OnInit {
           })
         })
     })
-    var sourceFeatures2 = new ol.source.Vector()
-    var layerFeatures2 = new ol.layer.Vector({
-        source: sourceFeatures2
-    });
+
+    this.GetLocationPoints().subscribe(
+      res => {
+        console.log(res);
+        this.Data = res.data;
+        this.Data.forEach(element => {
+          this.featurePoint = new ol.Feature({
+            geometry: new ol.geom.Point(fromLonLat([element.node.lon,element.node.lat]))
+            });
+          this.featurePoint.setId(element.node.id);
+          this.plotingPoints.push(this.featurePoint);
+          sourceFeatures.addFeatures([this.featurePoint]);
+        });
+      }
+);
+
+    
+    // var sourceFeatures2 = new ol.source.Vector()
+    // var layerFeatures2 = new ol.layer.Vector({
+    //     source: sourceFeatures2
+    // });
 
     // this.featurePoint.setId('point 1');
     // this.featurePoint1.setId('point 2');
@@ -133,7 +142,7 @@ export class HomeComponent implements OnInit {
           new ol.layer.Tile({
               source: new ol.source.OSM()
           }),
-          layerFeatures, layerFeatures2
+          layerFeatures
       ],
       view: new ol.View({
           center : this.schladmingWebMercator,
@@ -145,7 +154,7 @@ export class HomeComponent implements OnInit {
 
     var hoverInteraction = new ol.interaction.Select({
       condition: ol.events.condition.pointerMove,
-      layers: [layerFeatures, layerFeatures2],
+      layers: [layerFeatures],
       style: new ol.style.Style({
         image: new ol.style.Icon({
           anchor: [0.5, 0.5],
@@ -159,7 +168,7 @@ export class HomeComponent implements OnInit {
     this.map.addInteraction(hoverInteraction);
       var clickinter = new ol.interaction.Select({
         condition: ol.events.condition.click,
-        layers: [layerFeatures, layerFeatures2],
+        layers: [layerFeatures],
         style: new ol.style.Style({
           image: new ol.style.Icon({
             anchor: [0.5, 0.5],
@@ -175,9 +184,14 @@ export class HomeComponent implements OnInit {
               // this.popup(evt.selected[0].getId());
               // alert(evt.selected[0].getId() + " is clicked");
               DataCopy.Data.forEach(element => {
-                if(element.id == evt.selected[0].getId()){
+                if(element.node.id == evt.selected[0].getId()){
                   console.log(element);
-                  DataCopy.address = element.address;
+                  // DataCopy.address = element.address;
+                    DataCopy.housenumber = element.node.housenumber;
+                    DataCopy.names = element.node.name;
+                    DataCopy.street= element.node.street;
+                    DataCopy.postcode = element.node.postcode;
+                    DataCopy.phone = element.node.phone;
                   DataCopy.modal.style.display = "block";
                   // DataCopy.dialog.open(DailogComponent);
                   // const dialogRef = DataCopy.dialog.open(DailogComponent, {
@@ -199,6 +213,14 @@ export class HomeComponent implements OnInit {
   //   this.setupVaccine.showMap();
   // }
 
+ myFunction() {
+    var x = document.getElementById("myTopnav");
+    if (x.className === "topnav") {
+      x.className += " responsive";
+    } else {
+      x.className = "topnav";
+    }
+  }
   geometryStyle(feature){
     var
         style = [],
@@ -222,7 +244,10 @@ export class HomeComponent implements OnInit {
 closedailog(){
   this.modal.style.display = "none";
 }
-GetLocationPoints(user: { id: any}): Observable<any> {
+GetLocationPoints(): Observable<any> {
+  var user = {
+    id: 1
+  }
   const headers = { 'content-type': 'application/json'};
   return this.http.post(this.baseURL + 'getLocation', user,{'headers':headers})
 }

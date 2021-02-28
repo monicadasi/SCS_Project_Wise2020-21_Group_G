@@ -7,7 +7,7 @@ import {DataService} from '../dataservice.service';
 import Swal from 'sweetalert2';
 import { Observable } from 'rxjs';
 import * as $ from 'jquery';
-
+import { NgxSpinnerService } from "ngx-spinner";
 @Component({
   selector: 'app-otp',
   templateUrl: './otp.component.html',
@@ -21,7 +21,7 @@ export class OtpComponent implements OnInit {
   });
   hide = true;
   baseURL: string = "http://localhost:8080/user/";
-  constructor(private fb: FormBuilder, private route: ActivatedRoute,private router: Router,private http: HttpClient, private dataService: DataService) {}
+  constructor(private fb: FormBuilder,private spinner: NgxSpinnerService, private route: ActivatedRoute,private router: Router,private http: HttpClient, private dataService: DataService) {}
   otp;
   ngOnInit() {
     this.otp =  new FormControl('', [Validators.required]);
@@ -128,9 +128,10 @@ export class OtpComponent implements OnInit {
      email: this.dataService.emailStore,
      tokenValue: this.otp.value
     }
-    
+    this.spinner.show();
     this.verifyOtp(user).subscribe(
       res => {
+        this.spinner.hide();
         if(res.status == 'success' && res.message == 'Token verified') {
           if (this.dataService.firstName) {
           this.addPerson().subscribe(
@@ -159,8 +160,10 @@ export class OtpComponent implements OnInit {
   }
 
   sendOTP() {
+    this.spinner.show();
     this.resendOtp({email: this.dataService.emailStore}).subscribe(
       res => {
+        this.spinner.hide();
         if(res.status == 'success') {
           this.successAlertNotification();
         }

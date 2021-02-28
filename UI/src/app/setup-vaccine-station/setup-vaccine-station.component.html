@@ -25,11 +25,112 @@
     <mat-form-field appearance="fill" style="    margin-left: 0.5rem;margin-right: 2rem;">
       <mat-label>City</mat-label>
       <mat-select [(value)]="selected" required>
-        <mat-option value="Frankfurt am main">Frankfurt am main</mat-option>
-        <mat-option value="Berlin">Berlin</mat-option>
+        <mat-option value="two">Frankfurt am main</mat-option>
+         <mat-option value="two">Berlin       </mat-option>
+ <mat-option value="two">Hamburg</mat-option>
+ <mat-option value="two">Munich / München</mat-option>
+ <mat-option value="two">Cologne / Köln</mat-option>
+ <mat-option value="two">Frankfurt am Main~</mat-option>
+ <mat-option value="two">Stuttgart~~~~~~~~~</mat-option>
+ <mat-option value="two">Dortmund</mat-option>
+ <mat-option value="two">Essen</mat-option>
+ <mat-option value="two">Bremen</mat-option>
+ <mat-option value="two">Dresden</mat-option>
+ <mat-option value="two">Leipzig</mat-option>
+ <mat-option value="two">Hanover / Hannover</mat-option>
+ <mat-option value="two">Nuremberg / Nürnberg</mat-option>
+ <mat-option value="two">Duisburg</mat-option>
+ <mat-option value="two">Bochum</mat-option>
+ <mat-option value="two">Wuppertal</mat-option>
+ <mat-option value="two">Bonn</mat-option>
+ <mat-option value="two">Bielefeld</mat-option>
+ <mat-option value="two">Mannheim</mat-option>
+ <mat-option value="two">Karlsruhe</mat-option>
+ <mat-option value="two">Münster</mat-option>
+ <mat-option value="two">Wiesbaden</mat-option>
+ <mat-option value="two">Augsburg</mat-option>
+ <mat-option value="two">Aachen</mat-option>
+ <mat-option value="two">Mönchengladbach</mat-option>
+ <mat-option value="two">Gelsenkirchen</mat-option>
+ <mat-option value="two">Brunswick / Braunschw</mat-option>eig
+ <mat-option value="two">Chemnitz</mat-option>
+ <mat-option value="two">Kiel</mat-option>
+ <mat-option value="two">Krefeld</mat-option>
+ <mat-option value="two">Halle</mat-option>
+ <mat-option value="two">Magdeburg</mat-option>
+ <mat-option value="two">Freiburg</mat-option>
+ <mat-option value="two">Oberhausen</mat-option>
+ <mat-option value="two">Lübeck</mat-option>
+ <mat-option value="two">Erfurt</mat-option>
+ <mat-option value="two">Rostock</mat-option>
+ <mat-option value="two">Mainz</mat-option>
+ <mat-option value="two">Kassel</mat-option>
+ <mat-option value="two">Hagen</mat-option>
+ <mat-option value="two">Hamm</mat-option>
+ <mat-option value="two">Saarbrücken</mat-option>
+ <mat-option value="two">Mülheim</mat-option>
+ <mat-option value="two">Herne</mat-option>
+ <mat-option value="two">Ludwigshafen</mat-option>
+ <mat-option value="two">Osnabrück</mat-option>
+ <mat-option value="two">Oldenburg</mat-option>
+ <mat-option value="two">Leverkusen</mat-option>
+ <mat-option value="two">Solingen</mat-option>
+ <mat-option value="two">Potsdam</mat-option>
+ <mat-option value="two">Neuss</mat-option>
+ <mat-option value="two">Heidelberg</mat-option>
+ <mat-option value="two">Paderborn</mat-option>
+ <mat-option value="two">Darmstadt</mat-option>
+ <mat-option value="two">Regensburg</mat-option>
+ <mat-option value="two">Würzburg</mat-option>
+ <mat-option value="two">Ingolstadt</mat-option>
+ <mat-option value="two">Heilbronn</mat-option>
+ <mat-option value="two">Ulm</mat-option>
+ <mat-option value="two">Wolfsburg</mat-option>
+ <mat-option value="two">Göttingen</mat-option>
+ <mat-option value="two">Offenbach</mat-option>
+ <mat-option value="two">Pforzheim</mat-option>
+ <mat-option value="two">Recklinghausen</mat-option>
+ <mat-option value="two">Bottrop</mat-option>
+ <mat-option value="two">Fürth</mat-option>
+ <mat-option value="two">Bremerhaven</mat-option>
+ <mat-option value="two">Reutlingen</mat-option>
+ <mat-option value="two">Remscheid</mat-option>
+ <mat-option value="two">Koblenz</mat-option>
+ <mat-option value="two">Bergisch Gladbach</mat-option>
+ <mat-option value="two">Erlangen</mat-option>
+ <mat-option value="two">Moers</mat-option>
+ <mat-option value="two">Trier</mat-option>
+ <mat-option value="two">Jena</mat-option>
+ <mat-option value="two">Siegen</mat-option>
+ <mat-option value="two">Hildesheim</mat-option>
+ <mat-option value="two">Salzgitter</mat-option>
+ <mat-option value="two">Cottbus</mat-option>
+
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill2" style="    margin-left: 0.5rem;margin-right: 2rem;">
+      <mat-label>Number of stations</mat-label>
+      <mat-select [(value)]="numberselected" >
+        <mat-option value="1">1</mat-option>
+        <mat-option value="2">2</mat-option>
+        <mat-option value="3">3</mat-option>
+        <mat-option value="4">4</mat-option>
+        <mat-option value="5">5</mat-option>
+        <mat-option value="6">6</mat-option>
+        <mat-option value="7">7</mat-option>
+        <mat-option value="8">8</mat-option>
+        <mat-option value="9">9</mat-option>
+        <mat-option value="10">10</mat-option>
+        <mat-option value="11">11</mat-option>
+        <mat-option value="12">12</mat-option>
+        <mat-option value="13">13</mat-option>
+        <mat-option value="14">14</mat-option>
+        <mat-option value="15">15</mat-option>
+        <mat-option value="16">16</mat-option>
       </mat-select>
     </mat-form-field>
     <button mat-raised-button color="primary" (click)="GetLocationToSetUpVStation()" >Search</button>
+    <button mat-raised-button color="primary" style="margin-left:2rem" (click)="ResetStationDetails()" >Reset Saved Location</button>
   </mat-card>
   </div>
   <div >
@@ -46,17 +147,27 @@
 
 
 <div id="myModal" class="modal">
-
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close" (click)="closedailog()">&times;</span>
-    <div>
-      Station Name : <input type="text">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Station Details</h4>
+        <button type="button" class="close" (click)="closedailog()" data-dismiss="modal">&times;</button>
+        
+      </div>
+      <div class="modal-body">
+        <div>
+          <div>House Number : {{housenumber}}</div>
+          <div>Name  : {{names}}</div>
+          <div>Street : {{street}}</div>
+          <div>Postcode : {{postcode}}</div>
+          <div>Phone : {{phone}}</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button mat-raised-button color="primary" (click)="SaveStationData()" >Save Station</button>
+        <button mat-raised-button  (click)="closedailog()" data-dismiss="modal">Close</button>
+      </div>
     </div>
-    <div>
-      Address : <span>{{address}}</span>
-    </div>
-  </div>
   
 
 </div>

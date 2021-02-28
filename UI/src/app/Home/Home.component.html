@@ -15,8 +15,12 @@
       <mat-icon>logout</mat-icon>
     </button>
     </div>
-</mat-toolbar>
+</mat-toolbar> 
 
+<main>
+  <div id="map" class="map" style="    max-width: 100% !important;
+  height: 49rem;"><div id="popup"></div></div>
+<div id="mouse-position"></div>
 
 <main>
 <mat-card class="example-card"  *ngFor="let article of mArticles">
@@ -41,19 +45,28 @@
 </mat-tab> -->
 
 <mat-toolbar color="primary" class="mat-elevation-z5  mattoolbar1">
+<!-- <mat-toolbar color="primary" class="mat-elevation-z5  mattoolbar1">
   <span style="margin-left: 39rem;"><mat-icon>copyright</mat-icon> All rights reserved</span>	
-</mat-toolbar>
+</mat-toolbar> -->
 
 <div id="myModal" class="modal">
-
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close" (click)="closedailog()">&times;</span>
-    
-    <div>
-      Address : <span>{{address}}</span>
+  <!-- Modal content-->
+  <div class="modal-content" style="color: black;">
+    <div class="modal-header">
+      <h4 class="modal-title">Station Details</h4>
+      <button type="button" class="close" (click)="closedailog()" data-dismiss="modal">&times;</button>
+      
+    </div>
+    <div class="modal-body">
+      <div>
+        <div>House Number : {{housenumber}}</div>
+        <div>Name  : {{names}}</div>
+        <div>Street : {{street}}</div>
+        <div>Postcode : {{postcode}}</div>
+        <div>Phone : {{phone}}</div>
+      </div>
     </div>
   </div>
-  
+
 
 </div>

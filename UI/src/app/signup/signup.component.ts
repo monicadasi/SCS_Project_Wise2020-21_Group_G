@@ -9,6 +9,8 @@ import {DataService} from '../dataservice.service';
 import {MustMatch} from '../passwordMatch';
 import Swal from 'sweetalert2';
 import * as $ from 'jquery';
+import { NgxSpinnerService } from "ngx-spinner";
+
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -71,7 +73,7 @@ export class SignupComponent implements OnInit {
 
   hide = true;
   baseURL: string = "http://localhost:8080/";
-  constructor(private fb: FormBuilder, private route: ActivatedRoute,private router: Router,private http: HttpClient, private dataService: DataService) {}
+  constructor(private fb: FormBuilder,private spinner: NgxSpinnerService, private route: ActivatedRoute,private router: Router,private http: HttpClient, private dataService: DataService) {}
   registrationForm;
   submitted = false;
 
@@ -164,6 +166,7 @@ export class SignupComponent implements OnInit {
      this.passwordStore = this.registrationForm.get('confPassword').value
      this.sendOTP({email: this.registrationForm.get('email').value}).subscribe(
       res => {
+        this.spinner.hide();
         if(res.status == 'success') {
          this.successAlertNotification();
         }

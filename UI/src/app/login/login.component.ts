@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import {DataService} from '../dataservice.service';
 import {AppService} from '../app.service';
 import Swal from 'sweetalert2';
-
+import { NgxSpinnerService } from "ngx-spinner";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
   showErrorMessage = false;
   submitted = false;
   baseURL: string = "http://localhost:8080/user/";
-  constructor(private fb: FormBuilder,private appService:AppService, private route: ActivatedRoute,private router: Router, private http: HttpClient, private dataService: DataService ) {
+  constructor(private fb: FormBuilder,private spinner: NgxSpinnerService,private appService:AppService, private route: ActivatedRoute,private router: Router, private http: HttpClient, private dataService: DataService ) {
     this.loginForm = this.fb.group({
       username: ['',[Validators.required,Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
       password: ['', [Validators.required,Validators.minLength(8)]]
@@ -67,12 +67,27 @@ export class LoginComponent implements OnInit {
     }
     var loginName = user.email.split('@');
     this.data = loginName[0];
+    this.spinner.show();
     this.loginPerson(user).subscribe(
       res => {
+        this.spinner.hide();
         if (res.data) {
         var userid = res.data.id;
         var username = res.data.firstName + " " + res.data.lastName;
         this.appService.SetUserId(userid);
+        // var a = "{ abc:" + username + ", id:" + userid +"}"
+        // document.cookie = a;
+        // document.cookie = "username"+'=; Max-Age=-99999999;'; 
+        // document.cookie = "userid"+'=; Max-Age=-99999999;'; 
+
+        // document.cookie = "username = "+ username; 
+        // document.cookie = "userid = "+userid; 
+
+       this.setCookie("username", username, 1);
+       this.setCookie("userid", userid, 1);
+        
+        console.log(this.getCookie("username"));
+        console.log(this.getCookie("userid"));
         this.appService.setUserName(username);
         console.log(userid, username);
         if(res.status == 'success') {
@@ -87,4 +102,24 @@ export class LoginComponent implements OnInit {
     );
     }
     
+    getCookie(cname) {
+      var name = cname + "=";
+      var ca = document.cookie.split(';');
+      for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+     setCookie(cname, cvalue, exdays) {
+      var d = new Date();
+      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+      var expires = "expires="+d.toUTCString();
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
 }
