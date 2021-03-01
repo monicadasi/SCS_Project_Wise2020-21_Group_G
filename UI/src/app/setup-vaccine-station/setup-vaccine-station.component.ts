@@ -27,7 +27,7 @@ export class SetupVaccineStationComponent implements OnInit {
   longitude: number = 8.6821;
   displaymap = false;
   map: any;
-
+  isDisabled = false;
   mapLat = 48.7776;
   mapLng = 9.2325;
   mapDefaultZoom = 18;
@@ -35,11 +35,12 @@ export class SetupVaccineStationComponent implements OnInit {
   Data;
   DataCopy;
   featurePoint;
+  
   plotingPoints:any  = [];
   sourceFeatures;
   sourceFeatures2;
   selected;
-  numberselected;
+  numberselected = 0;
   schladming = [8.6821, 50.1109]; // longitude, latitude follow the order 
   schladmingWebMercator = fromLonLat(this.schladming);
   baseURL: string = "http://localhost:8080/locationInfo/";
@@ -53,9 +54,7 @@ export class SetupVaccineStationComponent implements OnInit {
   id = "";
   constructor(private apservice:AppService,private spinner: NgxSpinnerService,public dialog: MatDialog,private fb: FormBuilder, 
     private route: ActivatedRoute,private router: Router, 
-    private http: HttpClient, private dataService: DataService) { }
-
-   
+    private http: HttpClient, private dataService: DataService) { }   
     colorCode = [{color:"Aqua", id:1},
     {color:"Beige", id:2},
     {color:"Brown", id:3},
@@ -77,11 +76,18 @@ export class SetupVaccineStationComponent implements OnInit {
     sourceFeatList:any[] = [];
     layerFeatureList : any[] = [];
     a;
+    userid;
+    selectControl:FormControl = new FormControl();
   ngOnInit() {
     this.Data = this.apservice.getSavedLocationDetails();
     this.UserName = this.apservice.getUserName();
     this.DataCopy = this;
-   
+    this.userid = this.apservice.GetUserID();
+    this.numberselected = this.apservice.getSavedLocationCount();
+    if(this.numberselected > 0){
+      this.isDisabled = true;
+    }
+    this.selectControl.setValue(this.numberselected.toString());
      this.sourceFeatures = new ol.source.Vector()
      setTimeout(() => {
       this.showMap();
@@ -99,21 +105,6 @@ export class SetupVaccineStationComponent implements OnInit {
     this.Data = this.apservice.getSavedLocationDetails();
     this.UserName = this.apservice.getUserName();
     var DataCopy = this;
-    
-    //  this.sourceFeatures = new ol.source.Vector()
-    // var layerFeatures = new ol.layer.Vector({
-    //     source: this.sourceFeatures,
-    //     style: new ol.style.Style({
-    //       image: new ol.style.Icon({
-    //         anchor: [0.5, 0.5],
-    //         anchorXUnits: "fraction",
-    //         anchorYUnits: "fraction",
-    //         src: "assets/marker.png",
-    //         color: "red"
-    //       })
-    //     })
-    // })
-
     this.colorCode.forEach(element => {
       this.sourceFeatures = new ol.source.Vector()
       var layerFeatures = new ol.layer.Vector({
@@ -166,42 +157,6 @@ export class SetupVaccineStationComponent implements OnInit {
   var layerFeatures2 = new ol.layer.Vector({
       source: sourceFeatures2
   });
-
-  // this.featurePoint.setId('point 1');
-  // this.featurePoint1.setId('point 2');
-  // sourceFeatures.addFeatures([this.featurePoint]);
-  // sourceFeatures.addFeatures([this.featurePoint1]);
-  
-
-
-  // this.map = new ol.Map({
-  //   target: document.getElementById('map'),
-  //   controls: [],
-  //   layers: [
-  //       new ol.layer.Tile({
-  //           source: new ol.source.OSM()
-  //       }),
-  //       layerFeatures, layerFeatures2
-  //   ],
-  //   view: new ol.View({
-  //       center : this.schladmingWebMercator,
-  //       zoom : 12
-  //   })
-  // });
-
-  // var hoverInteraction = new ol.interaction.Select({
-  //   condition: ol.events.condition.pointerMove,
-  //   layers: [layerFeatures, layerFeatures2],
-  //   style: new ol.style.Style({
-  //     image: new ol.style.Icon({
-  //       anchor: [0.5, 0.5],
-  //       anchorXUnits: "fraction",
-  //       anchorYUnits: "fraction",
-  //       src: "assets/icon.png"
-  //     })
-  //   })
-  // });
-
     var hoverInteraction = new ol.interaction.Select({
       condition: ol.events.condition.pointerMove,
       layers: [ this.layerFeatureList[0], this.layerFeatureList[5],this.layerFeatureList[10],
@@ -241,44 +196,23 @@ export class SetupVaccineStationComponent implements OnInit {
     this.map.addInteraction(clickinter);
         clickinter.on('select', function(evt){
             if(evt.selected.length > 0){
-              // this.popup(evt.selected[0].getId());
-              // alert(evt.selected[0].getId() + " is clicked");
-              // var i = 0;
               DataCopy.a.forEach(ele => {
                 var Data1 = ele.cityInfo;
                
                 Data1.forEach(element => {
                   if(element.id == evt.selected[0].getId()){
                     console.log(element);
-                    // DataCopy.dialog.open(DailogComponent);
-                    // this.opendailog();
                     DataCopy.housenumber = element.housenumber;
                     DataCopy.names = element.name;
                     DataCopy.street= element.street;
                     DataCopy.postcode = element.postcode;
                     DataCopy.phone = element.phone;
                     DataCopy.modal.style.display = "block";
+                    document.getElementById("myModal").style.display = "block";
                     DataCopy.id = element.id;
-                    // const dialogRef = DataCopy.dialog.open(DailogComponent, {
-                    //   width: '250px',
-                    //   data: {name: "this.name", animal: "this.animal"}
-                    // });
                   }
                 });
               });
-              // DataCopy.Data.forEach(element => {
-              //   if(element.id == evt.selected[0].getId()){
-              //     console.log(element);
-              //     // DataCopy.dialog.open(DailogComponent);
-              //     // this.opendailog();
-              //     DataCopy.address = element.address;
-              //     DataCopy.modal.style.display = "block";
-              //     // const dialogRef = DataCopy.dialog.open(DailogComponent, {
-              //     //   width: '250px',
-              //     //   data: {name: "this.name", animal: "this.animal"}
-              //     // });
-              //   }
-              // });
             }
         });
       this.map.on('pointermove', function(e) {
@@ -290,9 +224,11 @@ export class SetupVaccineStationComponent implements OnInit {
 
   opendailog(){
     this.modal.style.display = "block";
+    document.getElementById("myModal").style.display = "block";
   }
   closedailog(){
     this.modal.style.display = "none";
+    document.getElementById("myModal").style.display = "none";
   }
  
   ResetStationDetails(){
@@ -308,7 +244,9 @@ export class SetupVaccineStationComponent implements OnInit {
           confirmButtonText: 'OK'
         }).then((result) => {
           this.selected = "";
-          this.numberselected = "";
+          this.numberselected = 0;
+          this.selectControl.setValue('0');
+          this.isDisabled = false;
           this.sourceFeatList.forEach(elem =>{
             elem.clear();
           });
@@ -323,7 +261,8 @@ export class SetupVaccineStationComponent implements OnInit {
             confirmButtonText: 'OK'
           }).then((result) => {
             this.selected = "";
-            this.numberselected = "";
+            this.selectControl.setValue('0');
+            this.isDisabled = false;
             this.sourceFeatList.forEach(elem =>{
               elem.clear();
             });
@@ -336,20 +275,21 @@ export class SetupVaccineStationComponent implements OnInit {
   }
   restser(){
     var user = {
-      id: 1
+      id: this.userid
     }
     const headers = { 'content-type': 'application/json'};
     return this.http.post(this.baseURL + 'clearSavedLocations', user,{'headers':headers})
   }
   GetLocationToSetUpVStation(){
     if(this.selected != "" && this.selected != undefined){
-      if (this.numberselected == "" || this.numberselected == undefined){
+      if (this.numberselected == 0 || this.numberselected == undefined){
         this.numberselected = 1;
+        this.selectControl.setValue('1');
       }
     var LocationSearch = {
-      userId:5,
+      userId:this.userid,
       cityName: this.selected,
-      numOfStations: this.numberselected,
+      numOfStations: this.selectControl.value,
       
     }
     this.a = [];
@@ -452,7 +392,7 @@ export class SetupVaccineStationComponent implements OnInit {
 }
   SaveStation(){
    var userLocation =  {
-      "userId":1,
+      "userId":this.userid,
       "node":{"id":this.id}
   }
   const headers = { 'content-type': 'application/json'};

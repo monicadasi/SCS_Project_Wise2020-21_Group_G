@@ -111,7 +111,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill2" style="    margin-left: 0.5rem;margin-right: 2rem;">
       <mat-label>Number of stations</mat-label>
-      <mat-select [(value)]="numberselected" >
+      <mat-select [formControl]="selectControl" [disabled]="isDisabled">
         <mat-option value="1">1</mat-option>
         <mat-option value="2">2</mat-option>
         <mat-option value="3">3</mat-option>

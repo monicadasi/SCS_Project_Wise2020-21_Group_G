@@ -8,6 +8,7 @@ export class AppService {
 constructor() { }
 UserID = 0;
 UserName = "";
+savedLocationCount;
 getSavedLocationDetails(){
 
   var  Data:type[] = [
@@ -33,7 +34,12 @@ GetUserID(){
 SetUserId(userid){
   this.UserID = userid;
 }
-
+setSavedLocationCount(count){
+  this.savedLocationCount = count;
+}
+getSavedLocationCount(){
+  return this.savedLocationCount;
+}
 getUserName(){
   return this.UserName;
 }

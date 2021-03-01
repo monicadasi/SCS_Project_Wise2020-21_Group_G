@@ -77,9 +77,7 @@ export class HomeComponent implements OnInit {
        
       });
     }
-
     var ourDate = new Date();
-
 //Change it so that it is 7 days in the past.
 var pastDate = ourDate.getDate() - 30;
 ourDate.setDate(pastDate);

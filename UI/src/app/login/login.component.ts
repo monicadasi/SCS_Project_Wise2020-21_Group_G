@@ -89,7 +89,14 @@ export class LoginComponent implements OnInit {
     this.loginPerson(user).subscribe(
       res => {
         this.spinner.hide();
+        console.log(res);
         if (res.data) {
+          if(res.data.searchedLocationsCount != null){
+            this.appService.setSavedLocationCount(res.data.searchedLocationsCount);
+          }else{
+            this.appService.setSavedLocationCount(0);
+          }
+          
         var userid = res.data.id;
         var username = res.data.firstName + " " + res.data.lastName;
         this.appService.SetUserId(userid);

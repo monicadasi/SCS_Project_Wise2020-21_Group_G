@@ -63,8 +63,10 @@ export class SavedLocationsComponent implements OnInit {
   postcode = "";
   phone = "";
   id = "";
+  userID ;
   ngOnInit() {
     this.modal = document.getElementById("myModal");
+    this.userID = this.apservice.GetUserID();
     window.onclick = function(event) {
       if (event.target == this.modal) {
         this.modal.style.display = "none";
@@ -78,42 +80,20 @@ export class SavedLocationsComponent implements OnInit {
        
       });
     }
-    
-    // this.newsapi.v2.topHeadlines({
-    //   q: 'corona',
-    //   sortBy: 'relevancy',
-    //   country: 'de',
-    // }).then(response => {
-    //   console.log(response.articles);
-    //   this.mArticles=response.articles;
-    // });
-
     this.UserName = this.apservice.getUserName();
     // this.Data = this.apservice.getSavedLocationDetails();
     var user = {
-      id: 1
+      id: this.userID
     }
-    this.DataCopy = this;
+    var DataCopy = this;
 
     setTimeout(() => {
       this.showMap();
     },0)
-    // var sourceFeatures2 = new ol.source.Vector()
-    // var layerFeatures2 = new ol.layer.Vector({
-    //     source: sourceFeatures2
-    // });
-
-    // this.featurePoint.setId('point 1');
-    // this.featurePoint1.setId('point 2');
-    // sourceFeatures.addFeatures([this.featurePoint]);
-    // sourceFeatures.addFeatures([this.featurePoint1]);
-    
-
-
-    
   }
 
   showMap() {
+    var DataCopy = this;
     var sourceFeatures = new ol.source.Vector()
     var layerFeatures = new ol.layer.Vector({
         source: sourceFeatures,
@@ -189,16 +169,17 @@ export class SavedLocationsComponent implements OnInit {
             if(evt.selected.length > 0){
               // this.popup(evt.selected[0].getId());
               // alert(evt.selected[0].getId() + " is clicked");
-              this.DataCopy.Data.forEach(element => {
+              DataCopy.Data.forEach(element => {
                 if(element.node.id == evt.selected[0].getId()){
                   console.log(element);
                   // DataCopy.address = element.address;
-                    this.DataCopy.housenumber = element.node.housenumber;
-                    this.DataCopy.names = element.node.name;
-                    this.DataCopy.street= element.node.street;
-                    this.DataCopy.postcode = element.node.postcode;
-                    this.DataCopy.phone = element.node.phone;
-                  this.DataCopy.modal.style.display = "block";
+                    DataCopy.housenumber = element.node.housenumber;
+                    DataCopy.names = element.node.name;
+                    DataCopy.street= element.node.street;
+                    DataCopy.postcode = element.node.postcode;
+                    DataCopy.phone = element.node.phone;
+                 DataCopy.modal.style.display = "block";
+                 document.getElementById("myModal").style.display = "block";
                   // DataCopy.dialog.open(DailogComponent);
                   // const dialogRef = DataCopy.dialog.open(DailogComponent, {
                   //   width: '250px',
@@ -245,10 +226,11 @@ export class SavedLocationsComponent implements OnInit {
 }
 closedailog(){
   this.modal.style.display = "none";
+  document.getElementById("myModal").style.display = "none";
 }
 GetLocationPoints(): Observable<any> {
   var user = {
-    id: 1
+    id: this.userID
   }
   const headers = { 'content-type': 'application/json'};
   return this.http.post(this.baseURL + 'getLocation', user,{'headers':headers})
