@@ -21,6 +21,7 @@ import {
 } from '@angular/material';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { SavedLocationsComponent } from './saved-locations/saved-locations.component';
 @NgModule({
   declarations: [					
     AppComponent,
@@ -31,6 +32,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
       SetupVaccineStationComponent,
       DailogComponent,
       OtpComponent,
+      SavedLocationsComponent,
    ],
    entryComponents: [DailogComponent],
   imports: [

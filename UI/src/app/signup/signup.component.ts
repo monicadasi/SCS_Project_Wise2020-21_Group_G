@@ -129,13 +129,20 @@ export class SignupComponent implements OnInit {
   }
 
   successAlertNotification(){
-      Swal.fire({
-        title: 'OTP',
-        text: 'has been sent to your email successfully',
-        icon: 'success',
-        showCancelButton: false,
-        confirmButtonText: 'OK'
-      }).then((result) => {
+    Swal.fire({
+      title: '<strong style="font-family:serif">Successfully sent OTP</strong>',
+      html:'<span style="font-family:serif">Please check your email</span>',
+      icon: 'success',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: "btn btn-outline-primary"
+      },
+      padding: '3em',
+      showCancelButton: false,
+      confirmButtonText: 'OK',
+      allowEnterKey: true,
+      iconHtml: `<span class="iconify icon:ion:checkmark-circle icon-inline:false"></span>`
+    }).then((result) => {
         if(result.value) {
           this.router.navigate(['/otp']);
         }
@@ -143,7 +150,21 @@ export class SignupComponent implements OnInit {
   }
 
   passwordAlertNotification(){
-    Swal.fire('Passwords', "doesn't match", "error");
+    // Swal.fire('Passwords', "doesn't match", "error");
+    Swal.fire({
+      title: '<strong style="font-family:serif">Passwords doest not match</strong>',
+      html:'<span style="font-family:serif">Please type correct passwords</span>',
+      icon: 'error',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: "btn btn-outline-primary"
+      },
+      showCancelButton: false,
+      padding: '3em',
+      confirmButtonText: 'OK',
+      allowEnterKey: true,
+      iconHtml: `<span class="iconify icon:ion:close-circle-sharp icon-inline:false"></span>`
+    })
   }
 
   get f() { return this.registrationForm.controls; }

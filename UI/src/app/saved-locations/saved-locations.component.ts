@@ -14,17 +14,17 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {DataService} from '../dataservice.service';
 //Updated upstream
-import NewsAPI from 'newsapi';
+// import NewsAPI from 'newsapi';
 
 
 import { NgxSpinnerService } from "ngx-spinner";
 // Stashed changes
 @Component({
-  selector: 'app-Home',
-  templateUrl: './Home.component.html',
-  styleUrls: ['./Home.component.scss']
+  selector: 'app-saved-locations',
+  templateUrl: './saved-locations.component.html',
+  styleUrls: ['./saved-locations.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class SavedLocationsComponent implements OnInit {
 
   title = 'AppUI';
   latitude: number = 50.1109;
@@ -38,6 +38,7 @@ export class HomeComponent implements OnInit {
 
   mArticles:Array<any>;
   Data;
+  DataCopy;
   featurePoint;
   modal;
   address;
@@ -51,7 +52,7 @@ export class HomeComponent implements OnInit {
   baseURL: string = "http://localhost:8080/locationInfo/";
 //>>>>>>> Stashed changes
     UserName = "";
-  newsapi = new NewsAPI('31f1f66df33b44239d734be337e90630');
+  // newsapi = new NewsAPI('31f1f66df33b44239d734be337e90630');
   //   featurePoint1 = new ol.Feature({
   //     geometry: new ol.geom.Point([-12590727, 2281352])
   // });
@@ -77,43 +78,42 @@ export class HomeComponent implements OnInit {
        
       });
     }
-
-    var ourDate = new Date();
-
-//Change it so that it is 7 days in the past.
-var pastDate = ourDate.getDate() - 30;
-ourDate.setDate(pastDate);
-var dd = String(ourDate.getDate()).padStart(2, '0');
-var mm = String(ourDate.getMonth() + 1).padStart(2, '0'); //January is 0!
-var yyyy = ourDate.getFullYear();
-
-var toDate = yyyy + '-' + mm + '-' + dd;
-
-var today = new Date();
-var dd1 = String(today.getDate()).padStart(2, '0');
-var mm1 = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-var yyyy1 = today.getFullYear();
-
-var fromDate = yyyy1 + '-' + mm1 + '-' + dd1;
     
-    this.newsapi.v2.everything({
-      q: 'corona',
-      sortBy: 'relevancy',
-      // from: fromDate,
-      // to: toDate,
-      language: 'de'
-    }).then(response => {
-      console.log(response.articles);
-      this.mArticles=response.articles;
-    });
+    // this.newsapi.v2.topHeadlines({
+    //   q: 'corona',
+    //   sortBy: 'relevancy',
+    //   country: 'de',
+    // }).then(response => {
+    //   console.log(response.articles);
+    //   this.mArticles=response.articles;
+    // });
 
     this.UserName = this.apservice.getUserName();
     // this.Data = this.apservice.getSavedLocationDetails();
     var user = {
       id: 1
     }
-    var DataCopy = this;
-   
+    this.DataCopy = this;
+
+    setTimeout(() => {
+      this.showMap();
+    },0)
+    // var sourceFeatures2 = new ol.source.Vector()
+    // var layerFeatures2 = new ol.layer.Vector({
+    //     source: sourceFeatures2
+    // });
+
+    // this.featurePoint.setId('point 1');
+    // this.featurePoint1.setId('point 2');
+    // sourceFeatures.addFeatures([this.featurePoint]);
+    // sourceFeatures.addFeatures([this.featurePoint1]);
+    
+
+
+    
+  }
+
+  showMap() {
     var sourceFeatures = new ol.source.Vector()
     var layerFeatures = new ol.layer.Vector({
         source: sourceFeatures,
@@ -141,20 +141,6 @@ var fromDate = yyyy1 + '-' + mm1 + '-' + dd1;
         });
       }
 );
-
-    
-    // var sourceFeatures2 = new ol.source.Vector()
-    // var layerFeatures2 = new ol.layer.Vector({
-    //     source: sourceFeatures2
-    // });
-
-    // this.featurePoint.setId('point 1');
-    // this.featurePoint1.setId('point 2');
-    // sourceFeatures.addFeatures([this.featurePoint]);
-    // sourceFeatures.addFeatures([this.featurePoint1]);
-    
-
-
     this.map = new ol.Map({
       target: document.getElementById('map'),
       controls: [],
@@ -203,16 +189,16 @@ var fromDate = yyyy1 + '-' + mm1 + '-' + dd1;
             if(evt.selected.length > 0){
               // this.popup(evt.selected[0].getId());
               // alert(evt.selected[0].getId() + " is clicked");
-              DataCopy.Data.forEach(element => {
+              this.DataCopy.Data.forEach(element => {
                 if(element.node.id == evt.selected[0].getId()){
                   console.log(element);
                   // DataCopy.address = element.address;
-                    DataCopy.housenumber = element.node.housenumber;
-                    DataCopy.names = element.node.name;
-                    DataCopy.street= element.node.street;
-                    DataCopy.postcode = element.node.postcode;
-                    DataCopy.phone = element.node.phone;
-                  DataCopy.modal.style.display = "block";
+                    this.DataCopy.housenumber = element.node.housenumber;
+                    this.DataCopy.names = element.node.name;
+                    this.DataCopy.street= element.node.street;
+                    this.DataCopy.postcode = element.node.postcode;
+                    this.DataCopy.phone = element.node.phone;
+                  this.DataCopy.modal.style.display = "block";
                   // DataCopy.dialog.open(DailogComponent);
                   // const dialogRef = DataCopy.dialog.open(DailogComponent, {
                   //   width: '250px',
@@ -228,10 +214,6 @@ var fromDate = yyyy1 + '-' + mm1 + '-' + dd1;
         this.getTarget().style.cursor = hit ? 'pointer' : '';
     });
   }
-
-  // showMap() {
-  //   this.setupVaccine.showMap();
-  // }
 
  myFunction() {
     var x = document.getElementById("myTopnav");

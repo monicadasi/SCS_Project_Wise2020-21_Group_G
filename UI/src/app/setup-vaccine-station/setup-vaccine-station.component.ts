@@ -409,11 +409,18 @@ export class SetupVaccineStationComponent implements OnInit {
       if(res.status == 'success') {
         this.closedailog();
         Swal.fire({
-          title: 'Station Details',
-          text: 'Saved Successfully!!',
+          title: '<strong style="font-family:serif">Station Details</strong>',
+          html:'<span style="font-family:serif">Saved Successfully!!</span>',
           icon: 'success',
+          buttonsStyling: false,
+          customClass: {
+            confirmButton: "btn btn-outline-primary"
+          },
+          padding: '3em',
           showCancelButton: false,
-          confirmButtonText: 'OK'
+          confirmButtonText: 'OK',
+          allowEnterKey: true,
+          iconHtml: `<span class="iconify icon:ion:checkmark-circle icon-inline:false"></span>`
         }).then((result) => {
           this.GetLocationToSetUpVStation();
         });
@@ -427,7 +434,21 @@ export class SetupVaccineStationComponent implements OnInit {
     })
   }
   errorAlertNotification(){
-    Swal.fire('Invalid', 'credentials', 'error');
+    // Swal.fire('Invalid', 'credentials', 'error');
+    Swal.fire({
+      title: '<strong style="font-family:serif">Invalid Credentials</strong>',
+      html:'<span style="font-family:serif">Please check your details</span>',
+      icon: 'error',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: "btn btn-outline-primary"
+      },
+      showCancelButton: false,
+      padding: '3em',
+      confirmButtonText: 'OK',
+      allowEnterKey: true,
+      iconHtml: `<span class="iconify icon:ion:close-circle-sharp icon-inline:false"></span>`
+    })
 }
   SaveStation(){
    var userLocation =  {

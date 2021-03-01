@@ -6,9 +6,11 @@ import {LoginComponent} from './login/login.component';
 import {SignupComponent} from './signup/signup.component';
 import {PasswordComponent} from './password/password.component';
 import {OtpComponent} from './otp/otp.component';
+import {SavedLocationsComponent} from './saved-locations/saved-locations.component';
 const routes: Routes = [
   { path: 'setup_vaccine_station', component: SetupVaccineStationComponent },
   { path: 'home', component: HomeComponent },
+  { path: 'saved_locations', component: SavedLocationsComponent},
   { path: 'login', component: LoginComponent },
   { path: 'user', component: SignupComponent },
   { path: 'password', component: PasswordComponent },

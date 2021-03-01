@@ -89,11 +89,18 @@ export class PasswordComponent implements OnInit {
 
   successAlertNotification(){
     Swal.fire({
-      title: 'OTP',
-      text: 'has been sent to your email successfully',
+      title: '<strong style="font-family:serif">Successfully sent OTP</strong>',
+      html:'<span style="font-family:serif">Please check your email</span>',
       icon: 'success',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: "btn btn-outline-primary"
+      },
+      padding: '3em',
       showCancelButton: false,
-      confirmButtonText: 'OK'
+      confirmButtonText: 'OK',
+      allowEnterKey: true,
+      iconHtml: `<span class="iconify icon:ion:checkmark-circle icon-inline:false"></span>`
     }).then((result) => {
       if(result.value) {
         this.router.navigate(['/otp']);

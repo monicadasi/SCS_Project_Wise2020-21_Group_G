@@ -74,16 +74,37 @@ export class OtpComponent implements OnInit {
   }
 
   successAlertNotification(){
-    Swal.fire('OTP', 'has been sent to your email successfully', 'success')
+    // Swal.fire('OTP', 'has been sent to your email successfully', 'success')
+    Swal.fire({
+      title: '<strong style="font-family:serif">Successfully sent OTP</strong>',
+      html:'<span style="font-family:serif">Please check your email</span>',
+      icon: 'success',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: "btn btn-outline-primary"
+      },
+      padding: '3em',
+      showCancelButton: false,
+      confirmButtonText: 'OK',
+      allowEnterKey: true,
+      iconHtml: `<span class="iconify icon:ion:checkmark-circle icon-inline:false"></span>`
+    })
   }
 
   registerAlertNotification(){
     Swal.fire({
-      title: 'User',
-      text: 'registered successfully',
+      title: '<strong style="font-family:serif">User Registered Successfully</strong>',
+      html:'<span style="font-family:serif">Now you can start using application</span>',
       icon: 'success',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: "btn btn-outline-primary"
+      },
+      padding: '3em',
       showCancelButton: false,
-      confirmButtonText: 'OK'
+      confirmButtonText: 'OK',
+      allowEnterKey: true,
+      iconHtml: `<span class="iconify icon:ion:checkmark-circle icon-inline:false"></span>`
     }).then((result) => {
       if(result.value) {
         this.router.navigate(['/login']);
@@ -93,11 +114,18 @@ export class OtpComponent implements OnInit {
 
   errorAlertNotification(){
     Swal.fire({
-      title: 'User',
-      text: 'already exists.',
+      title: '<strong style="font-family:serif">User already exists</strong>',
+      html:'<span style="font-family:serif">Please use "Log in"</span>',
       icon: 'error',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: "btn btn-outline-primary"
+      },
       showCancelButton: false,
-      confirmButtonText: 'OK'
+      padding: '3em',
+      confirmButtonText: 'OK',
+      allowEnterKey: true,
+      iconHtml: `<span class="iconify icon:ion:close-circle-sharp icon-inline:false"></span>`
     }).then((result) => {
       if(result.value) {
         this.router.navigate(['/login']);
@@ -106,16 +134,37 @@ export class OtpComponent implements OnInit {
   }
 
   errorOtpAlertNotification(){
-    Swal.fire('OTP', 'verification failed', 'error');
+    // Swal.fire('OTP', 'verification failed', 'error');
+    Swal.fire({
+      title: '<strong style="font-family:serif">OTP verification failed</strong>',
+      html:'<span style="font-family:serif">Please enter correct OTP or click "Resend OTP"</span>',
+      icon: 'error',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: "btn btn-outline-primary"
+      },
+      showCancelButton: false,
+      padding: '3em',
+      confirmButtonText: 'OK',
+      allowEnterKey: true,
+      iconHtml: `<span class="iconify icon:ion:close-circle-sharp icon-inline:false"></span>`
+    })
   }
 
   passwordAlertNotification(){
     Swal.fire({
-      title: 'Password',
-      text: 'changed successfully',
+      title: '<strong style="font-family:serif">Password changed successfully</strong>',
+      html:'<span style="font-family:serif">You can login with new credentials</span>',
       icon: 'success',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: "btn btn-outline-primary"
+      },
       showCancelButton: false,
-      confirmButtonText: 'OK'
+      padding: '3em',
+      confirmButtonText: 'OK',
+      allowEnterKey: true,
+      iconHtml: `<span class="iconify icon:ion:checkmark-circle icon-inline:false"></span>`
     }).then((result) => {
       if(result.value) {
         this.router.navigate(['/login']);

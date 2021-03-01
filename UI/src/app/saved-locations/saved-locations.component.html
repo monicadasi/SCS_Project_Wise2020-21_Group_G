@@ -1,0 +1,76 @@
+<!-- <app-ol></app-ol> -->
+<mat-toolbar class="mat-elevation-z5 mattoolbar" color="primary">
+    <span class="example-spacer"></span>
+    <div fxShow="true" fxHide.lt-md="true">
+    <a mat-button routerLink="/home"   class="logo">Cova <span class="logo-span">X</span></a>
+    <a mat-button routerLink="/home" >Home</a>
+    <a mat-button routerLink="/setup_vaccine_station"  >Setup vaccine station</a>
+    <a mat-button routerLink="/saved_locations"  >Saved Locations</a>
+  </div>
+      <span class="spacer"></span>
+      <div class="loginSection">
+      <span class="username">
+        {{UserName}}
+      </span>
+          <button mat-button (click)= "logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+      </div>
+  </mat-toolbar> 
+  
+  <main>
+    <div id="map" class="map" style="    max-width: 100% !important;
+    height: 49rem;"><div id="popup"></div></div>
+  <div id="mouse-position"></div>
+  </main>
+  
+  <!-- <main>
+  <mat-card class="example-card"  *ngFor="let article of mArticles">
+    <a id="news" href={{article.url}}>
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title class="title">{{article.title}}</mat-card-title>
+      <mat-card-subtitle>{{article.source.name}}</mat-card-subtitle>
+    </mat-card-header>
+  </a>
+    <img mat-card-image class="img-article" src={{article.urlToImage}} alt="">
+    <mat-card-content>
+      <p>
+        {{article.description}}
+      </p>
+    </mat-card-content>
+  </mat-card> 
+  </main> -->
+  
+  <!-- <mat-tab label="Landkarte">
+    <ng-template matTabContent>
+    <app-mapdata id="map"></app-mapdata>
+    </ng-template>
+  </mat-tab> -->
+  
+  <mat-toolbar color="primary" class="mat-elevation-z5  mattoolbar1">
+  <!-- <mat-toolbar color="primary" class="mat-elevation-z5  mattoolbar1">
+    <span style="margin-left: 39rem;"><mat-icon>copyright</mat-icon> All rights reserved</span>	
+  </mat-toolbar> -->
+  
+  <div id="myModal" class="modal">
+    <!-- Modal content-->
+    <div class="modal-content" style="color: black;">
+      <div class="modal-header">
+        <h4 class="modal-title">Station Details</h4>
+        <button type="button" class="close" (click)="closedailog()" data-dismiss="modal">&times;</button>
+        
+      </div>
+      <div class="modal-body">
+        <div>
+          <div>House Number : {{housenumber}}</div>
+          <div>Name  : {{names}}</div>
+          <div>Street : {{street}}</div>
+          <div>Postcode : {{postcode}}</div>
+          <div>Phone : {{phone}}</div>
+        </div>
+      </div>
+    </div>
+  
+  
+  </div>

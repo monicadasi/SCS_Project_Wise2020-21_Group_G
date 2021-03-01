@@ -44,7 +44,25 @@ export class LoginComponent implements OnInit {
   }
 
   errorAlertNotification(){
-    Swal.fire('Invalid', 'credentials', 'error');
+      Swal.fire({
+        title: '<strong style="font-family:serif">Invalid Credentials</strong>',
+        // text: '<span style="font-family:serif">Check username and password are correct<span>',
+        html:'<span style="font-family:serif">Check username and password are correct</span>',
+        // background: '#fff url(../../assets/background3.png)',
+        // imageHeight: 70,
+        // imageWidth: 50,
+        buttonsStyling: false,
+        customClass: {
+          confirmButton: "btn btn-outline-primary"
+        },
+        icon: 'error',
+        padding: '3em',
+        showCancelButton: false,
+        confirmButtonText: 'OK',
+        allowEnterKey: true,
+        iconHtml: `<span class="iconify icon:ion:close-circle-sharp icon-inline:false"></span>`
+
+      })
 }
 
   get f() { return this.loginForm.controls; }
