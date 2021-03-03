@@ -1,0 +1,111 @@
+<mat-toolbar class="mat-elevation-z5 mattoolbar" color="primary">
+    <span class="example-spacer"></span>
+    <div fxShow="true" fxHide.lt-md="true">
+    <a mat-button routerLink="/home"  class="logo">Cova <span class="logo-span">X</span></a>
+    <a mat-button routerLink="/home" >Home</a>
+    <a mat-button routerLink="/setup_vaccine_station" >Setup vaccine station</a>
+    <a mat-button routerLink="/saved_locations"  >Saved Locations</a>
+    <a mat-button routerLink="/aboutus">About Us</a>
+    </div>
+      <span class="spacer"></span>
+      <div class="loginSection">
+      <span class="username">
+        {{UserName}}
+      </span>
+          <button mat-button (click)= "logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+      </div>
+  </mat-toolbar>
+<div class="about-section">
+    <h1>CovaX Systems</h1>
+    <p>"A web application which supports health administrations in finding suitable locations in Frankfurt am Main, to establish the vaccination
+        stations. The application provides recommendations based on the population and area
+        of the different Ortsbezirke in Frankfurt and availability of healthcare institutions such
+        as hospitals and clinics. The users are able to save their chosen locations so that they are
+        able to progress without rework. The user interface of the system is carefully designed
+        to provide seamless experience for the users."</p>
+    <!-- <p>Resize the browser window to see that this page is responsive by the way.</p> -->
+  </div>
+  
+  <h1 style="text-align:center;color: white;margin-top: 2rem;" >Project Guide</h1>
+  <div class="row">
+    <div class="column" style="margin-left:31%;">
+      <div class="card">
+        <div class="container">
+          <h2>Prof. Matthias Wagner</h2>
+          <p class="title">Prof. Dr. rer. nat. Dipl. Phys.</p>
+          <p>mfwagner@fb2.fra-uas.de</p>
+        </div>
+      </div>
+    </div>
+    <div class="column" >
+        <div class="card">
+          <div class="container">
+            <h2>Brian Tomusange</h2>
+            <p class="title"></p>
+            <p>brian.tomusange@stud.fra-uas.de</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <h1 style="text-align:center;color: white;margin-top: 2rem;">Team</h1>
+  <div class="row">
+    <div class="column" style="margin-left: 30px;">
+      <div class="card">
+        <div class="container">
+          <h3>Gurushant Channale</h3>
+          <p class="title">1363610</p>
+          <p></p>
+          <p>gurushant.channale@stud.fra-uas.de</p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="column">
+      <div class="card">
+        <div class="container">
+          <h3>Mayuri Priya</h3>
+          <p class="title">1344422</p>
+          <!-- <p>Some text that describes me lorem ipsum ipsum lorem.</p> -->
+          <p>mayuri.priya@stud.fra-uas.de</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="column">
+      <div class="card">
+        
+        <div class="container">
+          <h3>Sai Mounika Manduri</h3>
+          <p class="title">1343627</p>
+          <!-- <p>Some text that describes me lorem ipsum ipsum lorem.</p> -->
+          <p>sai.manduri@stud.fra-uas.de</p>
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="card">
+        
+        <div class="container">
+          <h3>Nikhil John Bejoy </h3>
+          <p class="title">1344244</p>
+          <!-- <p>Some text that describes me lorem ipsum ipsum lorem.</p> -->
+          <p>nikhil.johnbejoy@stud.fra-uas.de</p>
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="card">
+        
+        <div class="container">
+          <h3>Monica Dasi</h3>
+          <p class="title">1343737</p>
+          <!-- <p>Some text that describes me lorem ipsum ipsum lorem.</p> -->
+          <p>monica.dasi@stud.fra-uas.de</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
