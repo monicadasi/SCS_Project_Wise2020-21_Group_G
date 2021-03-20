@@ -7,5 +7,5 @@ import com.station.bean.CityNodes;
 
 public interface CityNodesRepository extends JpaRepository<CityNodes, Long> {
 	
-	public List<CityNodes> findByPostcodeIn(List<String> postalCodes);
+	public List<CityNodes> findByPostcodeInOrderByPostcodeDesc(List<String> postalCodes);
 }

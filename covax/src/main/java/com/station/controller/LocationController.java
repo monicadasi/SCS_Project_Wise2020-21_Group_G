@@ -97,7 +97,7 @@ public class LocationController {
 		for (Map.Entry<CityDivision, Integer> entry : cityDivisons.entrySet()) {
 
 			LocationInfo locInfo = new LocationInfo();
-			List<CityNodes> cityNodes = cityNodeRepo.findByPostcodeIn(entry.getKey().getPostalCodes());
+			List<CityNodes> cityNodes = cityNodeRepo.findByPostcodeInOrderByPostcodeDesc(entry.getKey().getPostalCodes());
 			cityNodes.removeAll(chosenCityNodes);
 
 			int limitedStations = entry.getValue() + 2;
@@ -118,6 +118,7 @@ public class LocationController {
 		for (SaveUserLocationData savedLoc : userLocationList) {
 			savedNodes.add(savedLoc.getNode());
 		}
+		List<LocationInfo> covaxTemp=new ArrayList<LocationInfo>();
 
 		for (int i = 0; i < covaxStations.size(); i++) {
 			// compare the saved nodes with that of received division nodes
@@ -133,9 +134,11 @@ public class LocationController {
 			}
 			covaxStations.get(i).setCityInfo(divisionNodes);
 			if (allowed == 0 && divisionNodes.size() > allowed) {
-				covaxStations.remove(i);
+				//covaxStations.remove(i);
+				covaxTemp.add(covaxStations.get(i));
 			}
 		}
+		covaxStations.removeAll(covaxTemp);
 
 		return (covaxStations.size() == 0) ? Response.createErrorResponse("No Covax station found for the city!!")
 				: Response.createSuccessResponse("Covax Station Found!", covaxStations);

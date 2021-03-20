@@ -46,7 +46,7 @@ public class SampleController {
 
 		LocationSearch loc = new LocationSearch();
 		loc.setCityName("Frankfurt am Main");
-		System.out.println("Searched PostCodes : " + cityNoderepo.findByPostcodeIn(postalCodes).size());
+		System.out.println("Searched PostCodes : " + cityNoderepo.findByPostcodeInOrderByPostcodeDesc(postalCodes).size());
 
 		return "{\"value\":\"WORKING\"}";
 	}
