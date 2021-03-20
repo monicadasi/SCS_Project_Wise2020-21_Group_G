@@ -58,7 +58,7 @@ export class SetupVaccineStationComponent implements OnInit {
     colorCode = [{color:"Aqua", id:1},
     {color:"Beige", id:2},
     {color:"Brown", id:3},
-    {color:"Black", id:4},
+    {color:"gray", id:4},
     {color:"BlueViolet", id:5},
     {color:"Blue", id:6},
     {color:"Chartreuse", id:7},
@@ -83,6 +83,25 @@ export class SetupVaccineStationComponent implements OnInit {
     this.UserName = this.apservice.getUserName();
     this.DataCopy = this;
     this.userid = this.apservice.GetUserID();
+    var user :any = {
+      email: "",
+      password: ""
+    }
+    user = this.apservice.getUserLog();
+
+    this.loginPerson(user).subscribe(
+      res => {
+        this.spinner.hide();
+        console.log(res);
+        if (res.data) {
+          if(res.data.searchedLocationsCount != null){
+            this.apservice.setSavedLocationCount(res.data.searchedLocationsCount);
+          }else{
+            this.apservice.setSavedLocationCount(0);
+          }
+      } 
+      }
+    );
     this.numberselected = this.apservice.getSavedLocationCount();
     if(this.numberselected > 0){
       this.isDisabled = true;
@@ -226,6 +245,11 @@ export class SetupVaccineStationComponent implements OnInit {
     this.modal.style.display = "block";
     document.getElementById("myModal").style.display = "block";
   }
+  loginPerson(user: { email: string, password: string}): Observable<any> {
+    var baseURLuser: string = "http://localhost:8080/user/";
+    const headers = { 'content-type': 'application/json'};
+    return this.http.post(baseURLuser + 'login', user,{'headers':headers})
+  }
   closedailog(){
     this.modal.style.display = "none";
     document.getElementById("myModal").style.display = "none";
@@ -284,7 +308,7 @@ export class SetupVaccineStationComponent implements OnInit {
     if(this.selected != "" && this.selected != undefined){
       if (this.numberselected == 0 || this.numberselected == undefined){
         this.numberselected = 1;
-        this.selectControl.setValue('1');
+        this.selectControl.setValue('5');
       }
     var LocationSearch = {
       userId:this.userid,

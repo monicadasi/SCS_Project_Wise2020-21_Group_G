@@ -9,6 +9,7 @@ constructor() { }
 UserID = 0;
 UserName = "";
 savedLocationCount;
+userLog;
 getSavedLocationDetails(){
 
   var  Data:type[] = [
@@ -27,7 +28,12 @@ getSavedLocationDetails(){
 
 return Data;
 }
-
+setUserLog(user){
+  this.userLog = user;
+}
+getUserLog(){
+  return this.userLog;
+}
 GetUserID(){
   return this.UserID;
 }

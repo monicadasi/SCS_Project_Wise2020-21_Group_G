@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 declare var ol: any;
 import * as $ from 'jquery' 
+import {Subscription} from 'rxjs';
+import {NavigationStart,Router} from '@angular/router';
 
+export let browserRefresh = false;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,12 +14,20 @@ export class AppComponent implements OnInit{
   title = 'AppUI';
   latitude: number = 50.1109;
   longitude: number = 8.6821;
-
+  subscription:Subscription;
   map: any;
 
   mapLat = 48.7776;
   mapLng = 9.2325;
   mapDefaultZoom = 18;
+  constructor(private router: Router) {
+    this.subscription = router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        browserRefresh = !router.navigated;
+        
+      }
+    });
+  }
 
   ngOnInit(){
     // var mousePositionControl = new ol.control.MousePosition({

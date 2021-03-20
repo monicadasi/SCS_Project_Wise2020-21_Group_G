@@ -83,6 +83,7 @@ export class LoginComponent implements OnInit {
       email: this.loginForm.get('username').value,
       password: this.loginForm.get('password').value
     }
+    this.appService.setUserLog(user);
     var loginName = user.email.split('@');
     this.data = loginName[0];
     this.spinner.show();
